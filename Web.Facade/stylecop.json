@@ -1,0 +1,37 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+  "settings": {
+      "indentation": {
+        "tabSize": 4,
+        "useTabs": false,
+        "indentationSize": 4
+      },
+      "documentationRules": {
+        "documentExposedElements": false,
+        "documentInternalElements": false,
+        "documentPrivateElements": false,
+        "documentInterfaces": false,
+        "documentPrivateFields": false,
+        "documentationCulture": "en-US",
+        "companyName": "Fedor Bashilov",
+        "xmlHeader": false
+      },
+      "layoutRules": {
+        "newlineAtEndOfFile": "allow",
+        "allowConsecutiveUsings": true
+      },
+      "maintainabilityRules": {
+        "topLevelTypes": [
+          "class",
+          "interface",
+          "struct",
+          "enum",
+          "delegate"
+        ]
+      },
+      "orderingRules": {
+        "usingDirectivesPlacement": "insideNamespace",
+        "systemUsingDirectivesFirst": true
+      }
+    }
+  }

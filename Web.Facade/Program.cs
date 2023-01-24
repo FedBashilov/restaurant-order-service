@@ -1,6 +1,20 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+﻿// Copyright (c) Fedor Bashilov. All rights reserved.
 
-app.MapGet("/", () => "Hello World!");
+namespace Web.Facade
+{
 
-app.Run();
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(
+                    webBuilder => webBuilder.UseStartup<Startup>());
+        }
+    }
+}
