@@ -11,5 +11,13 @@ namespace Web.Facade.Data
             : base(options) => this.Database.EnsureCreated();
 
         public DbSet<Order> Orders => this.Set<Order>();
+
+        public DbSet<OrderMenuItem> OrderMenuItems => this.Set<OrderMenuItem>();
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<OrderMenuItem>()
+                .HasKey(omi => new { omi.OrderId, omi.MenuItemId });
+        }
     }
 }

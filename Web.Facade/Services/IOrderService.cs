@@ -6,12 +6,12 @@ namespace Web.Facade.Services
 
     public interface IOrderService
     {
-        public Task<List<Order>> GetAllOrders();
+        public Task<IEnumerable<OrderResponse>> GetAllOrders(string accessToken);
 
-        public Task<Order> GetOrder(int id);
+        public Task<OrderResponse> GetOrder(int id, string accessToken);
 
-        public Task<Order> CreateOrder(Order newOrder);
+        public Task<OrderResponse> CreateOrder(CreateOrderDto newOrder, string accessToken);
 
-        public Task<Order> UpdateOrderStatus(int id, OrderStatus newStatus);
+        public Task<OrderResponse> UpdateOrderStatus(int id, OrderStatus newStatus, string accessToken);
     }
 }

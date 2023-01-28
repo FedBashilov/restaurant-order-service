@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Facade", "Web.Facade\Web.Facade.csproj", "{749E8A04-3505-4575-BF30-DE351C1934B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Menu", "Infrastructure.Menu\Infrastructure.Menu.csproj", "{76DAA6BA-9DCC-4B13-84A3-BC24E20ED80B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{749E8A04-3505-4575-BF30-DE351C1934B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{749E8A04-3505-4575-BF30-DE351C1934B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{749E8A04-3505-4575-BF30-DE351C1934B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76DAA6BA-9DCC-4B13-84A3-BC24E20ED80B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76DAA6BA-9DCC-4B13-84A3-BC24E20ED80B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76DAA6BA-9DCC-4B13-84A3-BC24E20ED80B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76DAA6BA-9DCC-4B13-84A3-BC24E20ED80B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

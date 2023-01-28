@@ -2,6 +2,8 @@
 
 namespace Web.Facade
 {
+    using Infrastructure.Menu;
+    using Web.Facade.Extentions;
     using Web.Facade.Hubs;
 
     public class Startup
@@ -15,6 +17,10 @@ namespace Web.Facade
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMenuServices();
+            services.AddOrderServices(this.Configuration);
+            services.AddAuthServices(this.Configuration);
+
             services.AddSignalR();
 
             services.AddSwaggerGen();
