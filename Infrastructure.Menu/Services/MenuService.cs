@@ -17,12 +17,12 @@ namespace Infrastructure.Menu.Services
 
         public async Task<List<MenuItem>> GetAllMenu(string accessToken)
         {
-            return await this.httpRequestFactory.GetHttpRequest<List<MenuItem>>(new Uri("http://localhost:5291/api/menu"), accessToken);
+            return await this.httpRequestFactory.GetHttpRequest<List<MenuItem>>(new Uri("http://localhost:5291/api/v1/menu"), accessToken);
         }
 
         public async Task<MenuItem> GetMenuItem(int id, string accessToken)
         {
-            return await this.httpRequestFactory.GetHttpRequest<MenuItem>(new Uri($"http://localhost:5291/api/menu/{id}"), accessToken);
+            return await this.httpRequestFactory.GetHttpRequest<MenuItem>(new Uri($"http://localhost:5291/api/v1/menu/{id}"), accessToken);
 
         }
     }
