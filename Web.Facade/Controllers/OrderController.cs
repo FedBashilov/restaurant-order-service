@@ -84,10 +84,14 @@ namespace Web.Facade.Controllers
         [HttpPost]
         [Route("")]
         [ProducesResponseType(201, Type = typeof(OrderResponse))]
+        [ProducesResponseType(400, Type = typeof(ErrorResponse))]
         [ProducesResponseType(500, Type = typeof(ErrorResponse))]
         public async Task<IActionResult> CreateOrder(
             [FromBody] CreateOrderDto newOrder)
         {
+            if (newOrder == null) { return this.BadRequest(new ErrorResponse("Invalid request body.")); }
+            if (newOrder.MenuItemIds == null) { return this.BadRequest(new ErrorResponse("MenuItemIds cannot be null.")); }
+
             this.logger.LogInformation($"Starting to create order: {JsonSerializer.Serialize(newOrder)} ...");
 
             try
@@ -111,12 +115,15 @@ namespace Web.Facade.Controllers
         [HttpPut]
         [Route("{id}")]
         [ProducesResponseType(200, Type = typeof(OrderResponse))]
+        [ProducesResponseType(400, Type = typeof(ErrorResponse))]
         [ProducesResponseType(404)]
         [ProducesResponseType(500, Type = typeof(ErrorResponse))]
         public async Task<IActionResult> UpdateOrderStatus(
             [FromRoute] int id,
             [FromBody] UpdateOrderStatusDto updateDto)
         {
+            if (updateDto == null) { return this.BadRequest(new ErrorResponse("Invalid request body.")); }
+
             try
             {
                 this.logger.LogInformation($"Starting to update order status = {updateDto.Status} with id = {id}...");
