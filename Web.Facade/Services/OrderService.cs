@@ -67,6 +67,7 @@ namespace Web.Facade.Services
             {
                 Status = orderDto.Status,
                 ClientId = clientId,
+                CreatedDate = DateTime.UtcNow,
             };
 
             using var dbContext = this.dbCxtFactory.CreateDbContext();
