@@ -102,11 +102,15 @@ namespace Web.Facade.Services
             {
                 throw new NotFoundException($"Not found menu item with id = {id}");
             }
+ 
+            if (newStatus == OrderStatus.Finished || newStatus == OrderStatus.Canceled)
+            {
+                order.CloseDate = DateTime.UtcNow;
+            }
 
             order.Status = newStatus;
 
             var newOrder = dbContext.Orders.Update(order).Entity;
-
             await dbContext.SaveChangesAsync();
 
             var orderResponse = await this.GetOrderResponse(order, dbContext, accessToken);
