@@ -25,11 +25,14 @@ namespace Web.Facade.Controllers
         [Authorize(Roles = "cook, admin")]
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetAllOrders()
+        public async Task<IActionResult> GetOrders(
+            [FromQuery] int offset = 0,
+            [FromQuery] int count = 100,
+            [FromQuery] bool orderDesc = false)
         {
             this.logger.LogInformation($"Starting to get all orders...");
             var accessToken = await this.HttpContext.GetTokenAsync("access_token");
-            var orders = await this.orderService.GetAllOrders(accessToken);
+            var orders = await this.orderService.GetOrders(accessToken, offset, count, orderDesc);
 
             this.logger.LogInformation($"All orders received successfully! Orders: {JsonSerializer.Serialize(orders)}. Sending the orders in response...");
             return this.Ok(orders);

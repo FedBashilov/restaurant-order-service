@@ -6,7 +6,11 @@ namespace Web.Facade.Services
 
     public interface IOrderService
     {
-        public Task<IEnumerable<OrderResponse>> GetAllOrders(string accessToken);
+        public Task<IEnumerable<OrderResponse>> GetOrders(
+            string accessToken,
+            int offset = 0,
+            int count = 100,
+            bool orderDesc = false);
 
         public Task<OrderResponse> GetOrder(int id, string accessToken);
 

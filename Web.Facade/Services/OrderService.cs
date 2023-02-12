@@ -19,13 +19,25 @@ namespace Web.Facade.Services
             this.dbCxtFactory = dbCxtFactory;
         }
 
-        public async Task<IEnumerable<OrderResponse>> GetAllOrders(string accessToken)
+        public async Task<IEnumerable<OrderResponse>> GetOrders(
+            string accessToken,
+            int offset = 0,
+            int count = 100,
+            bool orderDesc = false)
         {
             using var dbContext = this.dbCxtFactory.CreateDbContext();
 
+            var orderQuery = orderDesc ?
+                dbContext.Orders.OrderByDescending(x => x.Id) :
+                dbContext.Orders.OrderBy(x => x.Id);
+
+            var pageQuery = orderQuery.Skip(offset).Take(count);
+
+            var orders = await pageQuery.ToListAsync();
+
             var ordersResponse = new List<OrderResponse>();
 
-            foreach (var order in dbContext.Orders)
+            foreach (var order in orders)
             {
                 var orderResponse = await this.GetOrderResponse(order, dbContext, accessToken);
 
