@@ -7,16 +7,6 @@ namespace Web.Facade.Models
 
     public class Order
     {
-        public Order()
-        {
-        }
-
-        public Order(CreateOrderDto orderDto)
-        {
-            this.ClientId = orderDto.ClientId;
-            this.Status = orderDto.Status;
-        }
-
         public int Id { get; set; }
 
         public string? ClientId { get; set; }

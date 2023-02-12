@@ -93,7 +93,9 @@ namespace Web.Facade.Controllers
             try
             {
                 var accessToken = await this.HttpContext.GetTokenAsync("access_token");
-                var order = await this.orderService.CreateOrder(newOrder, accessToken);
+                var clientId = JwtService.GetClaimValue(accessToken, "http://schemas.xmlsoap.org/ws/2009/09/identity/claims/actor");
+
+                var order = await this.orderService.CreateOrder(newOrder, clientId, accessToken);
 
                 this.logger.LogInformation($"The order created successfully! order: {JsonSerializer.Serialize(order)}. Sending the order in response...");
                 return this.StatusCode(201, order);

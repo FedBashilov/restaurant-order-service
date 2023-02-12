@@ -61,9 +61,13 @@ namespace Web.Facade.Services
             return orderResponse;
         }
 
-        public async Task<OrderResponse> CreateOrder(CreateOrderDto orderDto, string accessToken)
+        public async Task<OrderResponse> CreateOrder(CreateOrderDto orderDto, string clientId, string accessToken)
         {
-            var newOrder = new Order(orderDto);
+            var newOrder = new Order()
+            {
+                Status = orderDto.Status,
+                ClientId = clientId,
+            };
 
             using var dbContext = this.dbCxtFactory.CreateDbContext();
             var order = dbContext.Orders.Add(newOrder).Entity;
@@ -74,7 +78,7 @@ namespace Web.Facade.Services
             {
                 foreach (var menuItem in orderDto.MenuItemIds)
                 {
-                    await dbContext.OrderMenuItems.AddAsync(new OrderMenuItem(menuItem) { OrderId = order.Id});
+                    await dbContext.OrderMenuItems.AddAsync(new OrderMenuItem(menuItem) { OrderId = order.Id });
                 }
             }
 

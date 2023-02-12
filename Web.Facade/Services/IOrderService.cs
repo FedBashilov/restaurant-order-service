@@ -12,10 +12,18 @@ namespace Web.Facade.Services
             int count = 100,
             bool orderDesc = false);
 
-        public Task<OrderResponse> GetOrder(int id, string accessToken);
+        public Task<OrderResponse> GetOrder(
+            int id,
+            string accessToken);
 
-        public Task<OrderResponse> CreateOrder(CreateOrderDto newOrder, string accessToken);
+        public Task<OrderResponse> CreateOrder(
+            CreateOrderDto newOrder,
+            string clientId,
+            string accessToken);
 
-        public Task<OrderResponse> UpdateOrderStatus(int id, OrderStatus newStatus, string accessToken);
+        public Task<OrderResponse> UpdateOrderStatus(
+            int id,
+            OrderStatus newStatus,
+            string accessToken);
     }
 }
