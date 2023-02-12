@@ -9,5 +9,7 @@ namespace Infrastructure.Menu.Models
         public string? Name { get; set; }
 
         public decimal Price { get; set; }
+
+        public bool Visible { get; set; } = true;
     }
 }
