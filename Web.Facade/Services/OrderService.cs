@@ -73,10 +73,18 @@ namespace Web.Facade.Services
             using var dbContext = this.dbCxtFactory.CreateDbContext();
             var order = dbContext.Orders.Add(newOrder).Entity;
 
-            await dbContext.SaveChangesAsync();
-
             if (orderDto.MenuItemIds != null)
             {
+                foreach (var menuItem in orderDto.MenuItemIds)
+                {
+                    if (!await this.IsMenuItemExist(menuItem.MenuItemId, accessToken))
+                    {
+                        throw new NotFoundException($"Menu item with id = {menuItem.MenuItemId} not found");
+                    }
+                }
+
+                await dbContext.SaveChangesAsync();
+
                 foreach (var menuItem in orderDto.MenuItemIds)
                 {
                     await dbContext.OrderMenuItems.AddAsync(new OrderMenuItem(menuItem) { OrderId = order.Id });
@@ -132,6 +140,12 @@ namespace Web.Facade.Services
             }
 
             return orderResponse;
+        }
+
+        private async Task<bool> IsMenuItemExist(int menuItemId, string accessToken)
+        {
+            var menuItem = await this.menuService.GetMenuItem(menuItemId, accessToken);
+            return menuItem != null;
         }
     }
 }
