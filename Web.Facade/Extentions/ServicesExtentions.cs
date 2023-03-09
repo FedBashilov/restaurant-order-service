@@ -16,6 +16,8 @@ namespace Web.Facade.Extentions
         public static void AddOrderServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.TryAddSingleton<IOrderService, OrderService>();
+            services.TryAddSingleton<IUserHubConnectionsRepository, ClientHubConnectionsRepository>();
+
             services.AddDbContextFactory<OrderDatabaseContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DatabaseConnection"));

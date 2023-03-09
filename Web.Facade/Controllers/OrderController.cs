@@ -6,7 +6,9 @@ namespace Web.Facade.Controllers
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.SignalR;
     using Web.Facade.Exceptions;
+    using Web.Facade.Hubs;
     using Web.Facade.Models;
     using Web.Facade.Services;
 
@@ -14,11 +16,25 @@ namespace Web.Facade.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderService orderService;
+
+        private readonly IHubContext<OrderClientHub> clientHubCtx;
+        private readonly IHubContext<OrderCookHub> cookHubCtx;
+
+        private readonly IUserHubConnectionsRepository connRepo;
+
         private readonly ILogger<OrderController> logger;
 
-        public OrderController(IOrderService orderService, ILogger<OrderController> logger)
+        public OrderController(
+            IOrderService orderService,
+            IHubContext<OrderClientHub> clientHubCtx,
+            IHubContext<OrderCookHub> cookHubCtx,
+            IUserHubConnectionsRepository connRepo,
+            ILogger<OrderController> logger)
         {
             this.orderService = orderService;
+            this.clientHubCtx = clientHubCtx;
+            this.cookHubCtx = cookHubCtx;
+            this.connRepo = connRepo;
             this.logger = logger;
         }
 
@@ -101,8 +117,16 @@ namespace Web.Facade.Controllers
 
                 var order = await this.orderService.CreateOrder(newOrder, clientId, accessToken);
 
+                await this.clientHubCtx.Clients.Client(this.connRepo.GetConnectionId(clientId)).SendAsync("Notify", order);
+                await this.cookHubCtx.Clients.All.SendAsync("Notify", order);
+
                 this.logger.LogInformation($"The order created successfully! order: {JsonSerializer.Serialize(order)}. Sending the order in response...");
                 return this.StatusCode(201, order);
+            }
+            catch (NotFoundException ex)
+            {
+                this.logger.LogWarning(ex, $"Can't update order status. {ex.Message}. Sending 400 response...");
+                return this.BadRequest($"Menu item does`t exist");
             }
             catch (Exception ex)
             {
@@ -128,7 +152,11 @@ namespace Web.Facade.Controllers
             {
                 this.logger.LogInformation($"Starting to update order status = {updateDto.Status} with id = {id}...");
                 var accessToken = await this.HttpContext.GetTokenAsync("access_token");
+
                 var order = await this.orderService.UpdateOrderStatus(id, updateDto.Status, accessToken);
+
+                await this.clientHubCtx.Clients.Client(this.connRepo.GetConnectionId(order.ClientId)).SendAsync("Notify", order);
+                await this.cookHubCtx.Clients.All.SendAsync("Notify", order);
 
                 this.logger.LogInformation($"The order with id = {id} updated successfully! order: {JsonSerializer.Serialize(order)}. Sending the order in response...");
                 return this.Ok(order);
