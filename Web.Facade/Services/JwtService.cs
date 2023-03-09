@@ -9,8 +9,8 @@ namespace Web.Facade.Services
         public static string GetClaimValue(string jwtTokenEncoded, string claimType)
         {
             var accessToken = new JwtSecurityToken(jwtTokenEncoded);
-            var userRole = accessToken.Claims.First(x => x.Type == claimType).Value;
-            return userRole;
+            var claim = accessToken.Claims.First(x => x.Type == claimType).Value;
+            return claim;
         }
     }
 }
