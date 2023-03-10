@@ -9,7 +9,8 @@ namespace Web.Facade.Controllers
     using Microsoft.AspNetCore.SignalR;
     using Web.Facade.Exceptions;
     using Web.Facade.Hubs;
-    using Web.Facade.Models;
+    using Web.Facade.Models.DTOs;
+    using Web.Facade.Models.Responses;
     using Web.Facade.Services;
 
     [Route("api/v1/orders")]
@@ -103,10 +104,10 @@ namespace Web.Facade.Controllers
         [ProducesResponseType(400, Type = typeof(ErrorResponse))]
         [ProducesResponseType(500, Type = typeof(ErrorResponse))]
         public async Task<IActionResult> CreateOrder(
-            [FromBody] CreateOrderDto newOrder)
+            [FromBody] CreateOrderDTO newOrder)
         {
             if (newOrder == null) { return this.BadRequest(new ErrorResponse("Invalid request body.")); }
-            if (newOrder.MenuItemIds == null) { return this.BadRequest(new ErrorResponse("MenuItemIds cannot be null.")); }
+            if (newOrder.MenuItems == null) { return this.BadRequest(new ErrorResponse("MenuItemIds cannot be null.")); }
 
             this.logger.LogInformation($"Starting to create order: {JsonSerializer.Serialize(newOrder)} ...");
 
@@ -143,7 +144,7 @@ namespace Web.Facade.Controllers
         [ProducesResponseType(500, Type = typeof(ErrorResponse))]
         public async Task<IActionResult> UpdateOrderStatus(
             [FromRoute] int id,
-            [FromBody] UpdateOrderStatusDto updateDto)
+            [FromBody] UpdateOrderStatusDTO updateDto)
         {
             if (updateDto == null) { return this.BadRequest(new ErrorResponse("Invalid request body.")); }
 

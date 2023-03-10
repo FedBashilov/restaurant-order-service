@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Fedor Bashilov. All rights reserved.
 
-namespace Web.Facade.Models
+namespace Web.Facade.Models.DTOs
 {
-    public class CreateOrderMenuItemDto
+    public class CreateOrderMenuItemDTO
     {
         public int MenuItemId { get; set; }
 

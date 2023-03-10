@@ -7,6 +7,8 @@ namespace Web.Facade.Services
     using Web.Facade.Data;
     using Web.Facade.Exceptions;
     using Web.Facade.Models;
+    using Web.Facade.Models.DTOs;
+    using Web.Facade.Models.Responses;
 
     public class OrderService : IOrderService
     {
@@ -61,7 +63,7 @@ namespace Web.Facade.Services
             return orderResponse;
         }
 
-        public async Task<OrderResponse> CreateOrder(CreateOrderDto orderDto, string clientId, string accessToken)
+        public async Task<OrderResponse> CreateOrder(CreateOrderDTO orderDto, string clientId, string accessToken)
         {
             var newOrder = new Order()
             {
@@ -73,9 +75,9 @@ namespace Web.Facade.Services
             using var dbContext = this.dbCxtFactory.CreateDbContext();
             var order = dbContext.Orders.Add(newOrder).Entity;
 
-            if (orderDto.MenuItemIds != null)
+            if (orderDto.MenuItems != null)
             {
-                foreach (var menuItem in orderDto.MenuItemIds)
+                foreach (var menuItem in orderDto.MenuItems)
                 {
                     if (!await this.IsMenuItemExist(menuItem.MenuItemId, accessToken))
                     {
@@ -85,7 +87,7 @@ namespace Web.Facade.Services
 
                 await dbContext.SaveChangesAsync();
 
-                foreach (var menuItem in orderDto.MenuItemIds)
+                foreach (var menuItem in orderDto.MenuItems)
                 {
                     await dbContext.OrderMenuItems.AddAsync(new OrderMenuItem(menuItem) { OrderId = order.Id });
                 }

@@ -1,7 +1,9 @@
 ﻿// Copyright (c) Fedor Bashilov. All rights reserved.
 
-namespace Web.Facade.Models
+namespace Web.Facade.Models.Responses
 {
+    using Microsoft.OpenApi.Extensions;
+
     public class OrderResponse
     {
         public OrderResponse(Order order)
@@ -10,7 +12,7 @@ namespace Web.Facade.Models
             this.ClientId = order.ClientId;
             this.CreatedDate = order.CreatedDate;
             this.CloseDate = order.CloseDate;
-            this.Status = order.Status;
+            this.Status = order.Status.GetDisplayName();
             this.TotalPrice = 0;
             this.MenuItems = new List<OrderMenuItemResponse>();
         }
@@ -25,7 +27,7 @@ namespace Web.Facade.Models
 
         public DateTime CloseDate { get; set; }
 
-        public OrderStatus Status { get; set; }
+        public string Status { get; set; }
 
         public decimal TotalPrice { get; set; }
     }

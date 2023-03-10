@@ -2,13 +2,15 @@
 
 namespace Web.Facade.Models
 {
+    using Web.Facade.Models.DTOs;
+
     public class OrderMenuItem
     {
         public OrderMenuItem()
         {
         }
 
-        public OrderMenuItem(CreateOrderMenuItemDto menuItemDto)
+        public OrderMenuItem(CreateOrderMenuItemDTO menuItemDto)
         {
             this.MenuItemId = menuItemDto.MenuItemId;
             this.Amount = menuItemDto.Amount;

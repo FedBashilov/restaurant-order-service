@@ -7,6 +7,7 @@ namespace Web.Facade.Hubs
     using Microsoft.EntityFrameworkCore;
     using Web.Facade.Data;
     using Web.Facade.Models;
+    using Web.Facade.Models.Responses;
     using Web.Facade.Services;
 
     [Authorize(Roles = "client")]
@@ -36,7 +37,13 @@ namespace Web.Facade.Hubs
                     o.Status != OrderStatus.Finished &&
                     o.Status != OrderStatus.Canceled).ToList();
 
-                await this.Clients.Client(this.Context.ConnectionId).SendAsync("Notify", activeOrders);
+                var activeOrderResponse = new List<OrderResponse>();
+                foreach (var order in activeOrders)
+                {
+                    activeOrderResponse.Add(new OrderResponse(order));
+                }
+
+                await this.Clients.Client(this.Context.ConnectionId).SendAsync("Notify", activeOrderResponse);
 
                 await base.OnConnectedAsync();
             }

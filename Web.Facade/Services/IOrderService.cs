@@ -3,6 +3,8 @@
 namespace Web.Facade.Services
 {
     using Web.Facade.Models;
+    using Web.Facade.Models.DTOs;
+    using Web.Facade.Models.Responses;
 
     public interface IOrderService
     {
@@ -17,7 +19,7 @@ namespace Web.Facade.Services
             string accessToken);
 
         public Task<OrderResponse> CreateOrder(
-            CreateOrderDto newOrder,
+            CreateOrderDTO newOrder,
             string clientId,
             string accessToken);
 
