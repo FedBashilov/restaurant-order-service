@@ -18,14 +18,7 @@ namespace Web.Facade.Services
 
         public IEnumerable<string> GetConnectionIds(string userId)
         {
-            var connnectionIds = this.connections.Where(x => x.Value == userId).Select(x => x.Key);
-
-            if (connnectionIds.Any())
-            {
-                return connnectionIds;
-            }
-
-            throw new InvalidOperationException($"No connection for client: {userId}");
+            return this.connections.Where(x => x.Value == userId).Select(x => x.Key);
         }
     }
 }

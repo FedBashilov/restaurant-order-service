@@ -34,7 +34,7 @@ namespace Web.Facade.Hubs
 
                 var activeOrders = dbContext.Orders.Where(o =>
                     o.ClientId == userId &&
-                    o.Status != OrderStatus.Finished &&
+                    o.Status != OrderStatus.Closed &&
                     o.Status != OrderStatus.Canceled).ToList();
 
                 var activeOrderResponse = new List<OrderResponse>();

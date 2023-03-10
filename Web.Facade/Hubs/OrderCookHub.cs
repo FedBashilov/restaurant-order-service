@@ -24,7 +24,7 @@ namespace Web.Facade.Hubs
             await using var dbContext = this.dbCxtFactory.CreateDbContext();
 
             var activeOrders = dbContext.Orders.Where(o =>
-                o.Status != OrderStatus.Finished &&
+                o.Status != OrderStatus.Closed &&
                 o.Status != OrderStatus.Canceled).ToList();
 
 

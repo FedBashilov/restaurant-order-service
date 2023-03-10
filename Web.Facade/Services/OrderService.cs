@@ -67,7 +67,7 @@ namespace Web.Facade.Services
         {
             var newOrder = new Order()
             {
-                Status = orderDto.Status,
+                Status = OrderStatus.InQueue,
                 ClientId = clientId,
                 CreatedDate = DateTime.UtcNow,
             };
@@ -112,8 +112,8 @@ namespace Web.Facade.Services
             {
                 throw new NotFoundException($"Not found menu item with id = {id}");
             }
- 
-            if (newStatus == OrderStatus.Finished || newStatus == OrderStatus.Canceled)
+
+            if (newStatus == OrderStatus.Closed || newStatus == OrderStatus.Canceled)
             {
                 order.CloseDate = DateTime.UtcNow;
             }

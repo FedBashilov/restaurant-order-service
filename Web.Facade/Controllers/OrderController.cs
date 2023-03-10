@@ -8,6 +8,7 @@ namespace Web.Facade.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
     using Web.Facade.Exceptions;
+    using Web.Facade.Extentions;
     using Web.Facade.Hubs;
     using Web.Facade.Models.DTOs;
     using Web.Facade.Models.Responses;
@@ -97,7 +98,7 @@ namespace Web.Facade.Controllers
             }
         }
 
-        [Authorize(Roles = "client, cook, admin")]
+        [Authorize(Roles = "client")]
         [HttpPost]
         [Route("")]
         [ProducesResponseType(201, Type = typeof(OrderResponse))]
@@ -107,7 +108,7 @@ namespace Web.Facade.Controllers
             [FromBody] CreateOrderDTO newOrder)
         {
             if (newOrder == null) { return this.BadRequest(new ErrorResponse("Invalid request body.")); }
-            if (newOrder.MenuItems == null) { return this.BadRequest(new ErrorResponse("MenuItemIds cannot be null.")); }
+            if (newOrder.MenuItems == null) { return this.BadRequest(new ErrorResponse("MenuItems cannot be null.")); }
 
             this.logger.LogInformation($"Starting to create order: {JsonSerializer.Serialize(newOrder)} ...");
 
@@ -153,12 +154,17 @@ namespace Web.Facade.Controllers
                 this.logger.LogInformation($"Starting to update order status = {updateDto.Status} with id = {id}...");
                 var accessToken = await this.HttpContext.GetTokenAsync("access_token");
 
-                var order = await this.orderService.UpdateOrderStatus(id, updateDto.Status, accessToken);
+                var order = await this.orderService.UpdateOrderStatus(id, updateDto.Status.ToOrderStatus(), accessToken);
 
                 await this.NotifyClientAndCooks(order.ClientId, order);
 
                 this.logger.LogInformation($"The order with id = {id} updated successfully! order: {JsonSerializer.Serialize(order)}. Sending the order in response...");
                 return this.Ok(order);
+            }
+            catch (ArgumentException ex)
+            {
+                this.logger.LogWarning(ex, $"Can't update order. {ex.Message}. Sending 400 response...");
+                return this.BadRequest(new ErrorResponse($"Can't update order. {ex.Message}."));
             }
             catch (NotFoundException ex)
             {
@@ -185,7 +191,6 @@ namespace Web.Facade.Controllers
             notifyTasks.Add(this.cookHubCtx.Clients.All.SendAsync("Notify", message));
 
             await Task.WhenAll(notifyTasks);
-
         }
     }
 }

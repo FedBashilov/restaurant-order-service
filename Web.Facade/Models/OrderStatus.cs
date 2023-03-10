@@ -9,5 +9,6 @@ namespace Web.Facade.Models
         Ready,
         Closed,
         Canceled,
+
     }
 }
