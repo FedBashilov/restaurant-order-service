@@ -63,16 +63,16 @@ namespace Web.Facade
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
 
-                endpoints.MapHub<OrderClientHub>("/client/notifications/orders");
-                endpoints.MapHub<OrderCookHub>("/cook/notifications/orders");
+                endpoints.MapHub<OrderClientHub>("/notifications/client/orders");
+                endpoints.MapHub<OrderCookHub>("/notifications/cook/orders");
             });
         }
     }
