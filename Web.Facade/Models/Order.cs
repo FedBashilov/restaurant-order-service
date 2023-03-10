@@ -2,9 +2,6 @@
 
 namespace Web.Facade.Models
 {
-    using System.ComponentModel.DataAnnotations.Schema;
-    using Microsoft.EntityFrameworkCore.Metadata.Internal;
-
     public class Order
     {
         public int Id { get; set; }
