@@ -4,12 +4,12 @@ namespace Web.Facade.Services
 {
     public interface IUserHubConnectionsRepository
     {
-        public string GetConnectionId(string userId);
+        public IEnumerable<string> GetConnectionIds(string userId);
 
         public bool TryAddConnection(
-            string userId,
-            string connectionId);
+            string connectionId,
+            string userId);
 
-        public bool TryRemoveConnection(string userId);
+        public bool TryRemoveConnection(string connectionId);
     }
 }

@@ -117,8 +117,7 @@ namespace Web.Facade.Controllers
 
                 var order = await this.orderService.CreateOrder(newOrder, clientId, accessToken);
 
-                await this.clientHubCtx.Clients.Client(this.connRepo.GetConnectionId(clientId)).SendAsync("Notify", order);
-                await this.cookHubCtx.Clients.All.SendAsync("Notify", order);
+                await this.NotifyClientAndCooks(clientId, order);
 
                 this.logger.LogInformation($"The order created successfully! order: {JsonSerializer.Serialize(order)}. Sending the order in response...");
                 return this.StatusCode(201, order);
@@ -155,8 +154,7 @@ namespace Web.Facade.Controllers
 
                 var order = await this.orderService.UpdateOrderStatus(id, updateDto.Status, accessToken);
 
-                await this.clientHubCtx.Clients.Client(this.connRepo.GetConnectionId(order.ClientId)).SendAsync("Notify", order);
-                await this.cookHubCtx.Clients.All.SendAsync("Notify", order);
+                await this.NotifyClientAndCooks(order.ClientId, order);
 
                 this.logger.LogInformation($"The order with id = {id} updated successfully! order: {JsonSerializer.Serialize(order)}. Sending the order in response...");
                 return this.Ok(order);
@@ -171,6 +169,22 @@ namespace Web.Facade.Controllers
                 this.logger.LogWarning(ex, $"Can't update order status. Unexpected error. Sending 500 response...");
                 return this.StatusCode(500, new ErrorResponse($"Can't update order status. Unexpected error."));
             }
+        }
+
+        private async Task NotifyClientAndCooks(string clientId, OrderResponse message)
+        {
+            var clientConnectionIds = this.connRepo.GetConnectionIds(clientId);
+            var notifyTasks = new List<Task>();
+
+            foreach (var connectionId in clientConnectionIds)
+            {
+                notifyTasks.Add(this.clientHubCtx.Clients.Client(connectionId).SendAsync("Notify", message));
+            }
+
+            notifyTasks.Add(this.cookHubCtx.Clients.All.SendAsync("Notify", message));
+
+            await Task.WhenAll(notifyTasks);
+
         }
     }
 }

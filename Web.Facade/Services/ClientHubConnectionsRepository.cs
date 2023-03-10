@@ -2,27 +2,27 @@
 
 namespace Web.Facade.Services
 {
-    using System.Collections.Concurrent;
-
     public class ClientHubConnectionsRepository : IUserHubConnectionsRepository
     {
-        private readonly ConcurrentDictionary<string, string> connections = new ();
+        private readonly Dictionary<string, string> connections = new ();
 
-        public bool TryAddConnection(string userId, string connectionId)
+        public bool TryAddConnection(string connectionId, string userId)
         {
-            return this.connections.TryAdd(userId, connectionId);
+            return this.connections.TryAdd(connectionId, userId);
         }
 
-        public bool TryRemoveConnection(string userId)
+        public bool TryRemoveConnection(string connectionId)
         {
-            return this.connections.TryRemove(userId, out _);
+            return this.connections.Remove(connectionId, out _);
         }
 
-        public string GetConnectionId(string userId)
+        public IEnumerable<string> GetConnectionIds(string userId)
         {
-            if (this.connections.TryGetValue(userId, out var connectionId))
+            var connnectionIds = this.connections.Where(x => x.Value == userId).Select(x => x.Key);
+
+            if (connnectionIds.Any())
             {
-                return connectionId;
+                return connnectionIds;
             }
 
             throw new InvalidOperationException($"No connection for client: {userId}");

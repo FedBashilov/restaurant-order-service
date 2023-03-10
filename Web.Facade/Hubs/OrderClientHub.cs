@@ -27,7 +27,7 @@ namespace Web.Facade.Hubs
         {
             var userId = this.GetUserId();
 
-            if (this.connRepo.TryAddConnection(userId, this.Context.ConnectionId))
+            if (this.connRepo.TryAddConnection(this.Context.ConnectionId, userId))
             {
                 await using var dbContext = this.dbCxtFactory.CreateDbContext();
 
@@ -36,7 +36,7 @@ namespace Web.Facade.Hubs
                     o.Status != OrderStatus.Finished &&
                     o.Status != OrderStatus.Canceled).ToList();
 
-                await this.Clients.User(this.Context.UserIdentifier).SendAsync("Notify", activeOrders);
+                await this.Clients.Client(this.Context.ConnectionId).SendAsync("Notify", activeOrders);
 
                 await base.OnConnectedAsync();
             }
@@ -44,10 +44,9 @@ namespace Web.Facade.Hubs
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            if (this.connRepo.TryRemoveConnection(this.GetUserId()))
-            {
-                await base.OnDisconnectedAsync(exception);
-            }
+            this.connRepo.TryRemoveConnection(this.Context.ConnectionId);
+
+            await base.OnDisconnectedAsync(exception);
         }
 
         private string GetUserId()
