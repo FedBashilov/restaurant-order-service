@@ -17,7 +17,6 @@ namespace Web.Facade.Models
 
         public OrderStatus Status { get; set; }
 
-        [Column(TypeName = "decimal(18, 2)")]
-        public decimal TotalPrice { get; set; }
+        public int TotalPrice { get; set; }
     }
 }

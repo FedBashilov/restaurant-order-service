@@ -29,6 +29,6 @@ namespace Web.Facade.Models.Responses
 
         public string Status { get; set; }
 
-        public decimal TotalPrice { get; set; }
+        public int TotalPrice { get; set; }
     }
 }
