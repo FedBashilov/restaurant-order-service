@@ -7,7 +7,7 @@ namespace Web.Facade.Models
         InQueue,
         Cooking,
         Ready,
-        Finished,
+        Closed,
         Canceled,
     }
 }
