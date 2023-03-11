@@ -3,6 +3,7 @@
 namespace Web.Facade.Controllers
 {
     using System.Text.Json;
+    using Infrastructure.Auth.Constants;
     using Infrastructure.Auth.Services;
     using Infrastructure.Core.Extentions;
     using Infrastructure.Core.Models.DTOs;
@@ -42,7 +43,7 @@ namespace Web.Facade.Controllers
             this.logger = logger;
         }
 
-        [Authorize(Roles = "cook, admin")]
+        [Authorize(Roles = $"{UserRoles.Cook}, {UserRoles.Admin}")]
         [HttpGet("")]
         [ProducesResponseType(200, Type = typeof(List<OrderResponse>))]
         [ProducesResponseType(500, Type = typeof(ErrorResponse))]
@@ -68,7 +69,7 @@ namespace Web.Facade.Controllers
             }
         }
 
-        [Authorize(Roles = "cook, admin")]
+        [Authorize(Roles = $"{UserRoles.Cook}, {UserRoles.Admin}")]
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(OrderResponse))]
         [ProducesResponseType(404)]
@@ -98,7 +99,7 @@ namespace Web.Facade.Controllers
             }
         }
 
-        [Authorize(Roles = "client")]
+        [Authorize(Roles = UserRoles.Client)]
         [HttpPost("")]
         [ProducesResponseType(201, Type = typeof(OrderResponse))]
         [ProducesResponseType(400, Type = typeof(ErrorResponse))]
@@ -137,7 +138,7 @@ namespace Web.Facade.Controllers
             }
         }
 
-        [Authorize(Roles = "cook, admin")]
+        [Authorize(Roles = $"{UserRoles.Cook}, {UserRoles.Admin}")]
         [HttpPut("{id}")]
         [ProducesResponseType(200, Type = typeof(OrderResponse))]
         [ProducesResponseType(400, Type = typeof(ErrorResponse))]
