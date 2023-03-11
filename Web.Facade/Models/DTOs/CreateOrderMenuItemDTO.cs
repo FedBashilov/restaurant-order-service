@@ -2,10 +2,14 @@
 
 namespace Web.Facade.Models.DTOs
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class CreateOrderMenuItemDTO
     {
+        [Range(0, int.MaxValue, ErrorMessage = "The MenuItemId param must be positive")]
         public int MenuItemId { get; set; }
 
+        [Range(1, int.MaxValue, ErrorMessage = "The Amount param must be greater than 1")]
         public int Amount { get; set; }
     }
 }

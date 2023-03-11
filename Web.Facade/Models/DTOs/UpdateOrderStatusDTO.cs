@@ -2,8 +2,11 @@
 
 namespace Web.Facade.Models.DTOs
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class UpdateOrderStatusDTO
     {
-        public string Status { get; set; }
+        [Required(ErrorMessage = "The Status param is required")]
+        public string? Status { get; set; }
     }
 }

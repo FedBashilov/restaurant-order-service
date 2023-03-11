@@ -41,8 +41,7 @@ namespace Web.Facade.Controllers
         }
 
         [Authorize(Roles = "cook, admin")]
-        [HttpGet]
-        [Route("")]
+        [HttpGet("")]
         [ProducesResponseType(200, Type = typeof(List<OrderResponse>))]
         [ProducesResponseType(500, Type = typeof(ErrorResponse))]
         public async Task<IActionResult> GetOrders(
@@ -68,8 +67,7 @@ namespace Web.Facade.Controllers
         }
 
         [Authorize(Roles = "cook, admin")]
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(OrderResponse))]
         [ProducesResponseType(404)]
         [ProducesResponseType(500, Type = typeof(ErrorResponse))]
@@ -99,16 +97,17 @@ namespace Web.Facade.Controllers
         }
 
         [Authorize(Roles = "client")]
-        [HttpPost]
-        [Route("")]
+        [HttpPost("")]
         [ProducesResponseType(201, Type = typeof(OrderResponse))]
         [ProducesResponseType(400, Type = typeof(ErrorResponse))]
         [ProducesResponseType(500, Type = typeof(ErrorResponse))]
         public async Task<IActionResult> CreateOrder(
             [FromBody] CreateOrderDTO newOrder)
         {
-            if (newOrder == null) { return this.BadRequest(new ErrorResponse("Invalid request body.")); }
-            if (newOrder.MenuItems == null) { return this.BadRequest(new ErrorResponse("MenuItems cannot be null.")); }
+            if (!this.IsInputModelValid(out var message))
+            {
+                return this.StatusCode(400, new ErrorResponse(message));
+            }
 
             this.logger.LogInformation($"Starting to create order: {JsonSerializer.Serialize(newOrder)} ...");
 
@@ -137,8 +136,7 @@ namespace Web.Facade.Controllers
         }
 
         [Authorize(Roles = "cook, admin")]
-        [HttpPut]
-        [Route("{id}")]
+        [HttpPut("{id}")]
         [ProducesResponseType(200, Type = typeof(OrderResponse))]
         [ProducesResponseType(400, Type = typeof(ErrorResponse))]
         [ProducesResponseType(404)]
@@ -147,7 +145,10 @@ namespace Web.Facade.Controllers
             [FromRoute] int id,
             [FromBody] UpdateOrderStatusDTO updateDto)
         {
-            if (updateDto == null) { return this.BadRequest(new ErrorResponse("Invalid request body.")); }
+            if (!this.IsInputModelValid(out var message))
+            {
+                return this.StatusCode(400, new ErrorResponse(message));
+            }
 
             try
             {
@@ -191,6 +192,22 @@ namespace Web.Facade.Controllers
             notifyTasks.Add(this.cookHubCtx.Clients.All.SendAsync("Notify", message));
 
             await Task.WhenAll(notifyTasks);
+        }
+
+        private bool IsInputModelValid(out string? errorMessage)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                errorMessage = this.ModelState
+                    .SelectMany(state => state.Value.Errors)
+                    .Aggregate(string.Empty, (current, error) => current + (error.ErrorMessage + ". "));
+
+                return false;
+            }
+
+            errorMessage = null;
+
+            return true;
         }
     }
 }
