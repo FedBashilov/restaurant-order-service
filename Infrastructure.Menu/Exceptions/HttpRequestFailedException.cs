@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Fedor Bashilov. All rights reserved.
 
-namespace Web.Facade.Exceptions
+namespace Infrastructure.Menu.Exceptions
 {
     public class HttpRequestFailedException : Exception
     {

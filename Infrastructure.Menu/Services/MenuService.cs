@@ -23,7 +23,6 @@ namespace Infrastructure.Menu.Services
         public async Task<MenuItem> GetMenuItem(int id, string accessToken)
         {
             return await this.httpRequestFactory.GetHttpRequest<MenuItem>(new Uri($"http://localhost:5291/api/v1/menu/{id}"), accessToken);
-
         }
     }
 }

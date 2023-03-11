@@ -2,10 +2,13 @@
 
 namespace Web.Facade
 {
+    using Infrastructure.Auth.Extentions;
+    using Infrastructure.Database.Extentions;
     using Infrastructure.Menu;
     using Microsoft.OpenApi.Models;
-    using Web.Facade.Extentions;
-    using Web.Facade.Hubs;
+    using Notifications.Service.Extentions;
+    using Notifications.Service.Hubs;
+    using Orders.Service.Extentions;
 
     public class Startup
     {
@@ -18,9 +21,11 @@ namespace Web.Facade
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMenuServices();
-            services.AddOrderServices(this.Configuration);
+            services.AddDatabaseServices(this.Configuration);
             services.AddAuthServices(this.Configuration);
+            services.AddMenuServices();
+            services.AddNotificationServices();
+            services.AddOrderServices();
 
             services.AddSignalR();
 

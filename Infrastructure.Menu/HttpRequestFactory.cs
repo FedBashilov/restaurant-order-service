@@ -2,9 +2,9 @@
 
 namespace Infrastructure.Menu
 {
+    using Infrastructure.Menu.Exceptions;
     using System.Net.Http.Headers;
     using System.Text.Json;
-    using Web.Facade.Exceptions;
 
     internal class HttpRequestFactory : IHttpRequestFactory
     {

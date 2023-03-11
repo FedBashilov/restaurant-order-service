@@ -3,16 +3,18 @@
 namespace Web.Facade.Controllers
 {
     using System.Text.Json;
+    using Infrastructure.Auth.Services;
+    using Infrastructure.Core.Extentions;
+    using Infrastructure.Core.Models.DTOs;
+    using Infrastructure.Core.Models.Responses;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
-    using Web.Facade.Exceptions;
-    using Web.Facade.Extentions;
-    using Web.Facade.Hubs;
-    using Web.Facade.Models.DTOs;
-    using Web.Facade.Models.Responses;
-    using Web.Facade.Services;
+    using Notifications.Service;
+    using Notifications.Service.Hubs;
+    using Orders.Service;
+    using Orders.Service.Exceptions;
 
     [Route("api/v1/orders")]
     public class OrderController : ControllerBase
