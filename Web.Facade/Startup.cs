@@ -23,7 +23,7 @@ namespace Web.Facade
         {
             services.AddDatabaseServices(this.Configuration);
             services.AddAuthServices(this.Configuration);
-            services.AddMenuServices();
+            services.AddMenuServices(this.Configuration);
             services.AddNotificationServices();
             services.AddOrderServices();
 
