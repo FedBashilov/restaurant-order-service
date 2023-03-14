@@ -43,7 +43,7 @@ namespace Notifications.Service.Hubs
                 });
             }
 
-            await this.Clients.Client(this.Context.ConnectionId).SendAsync("Notify", activeOrderResponse);
+            await this.Clients.Client(this.Context.ConnectionId).SendAsync("Connect", activeOrderResponse);
 
             await base.OnConnectedAsync();
         }
