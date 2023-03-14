@@ -2,6 +2,7 @@
 
 namespace Notifications.Service.Hubs
 {
+    using Infrastructure.Auth.Constants;
     using Infrastructure.Core.Models;
     using Infrastructure.Core.Models.Responses;
     using Infrastructure.Database;
@@ -9,7 +10,7 @@ namespace Notifications.Service.Hubs
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.EntityFrameworkCore;
 
-    [Authorize(Roles = "cook")]
+    [Authorize(Roles = UserRoles.Cook)]
     public class OrderCookHub : Hub
     {
         private readonly IDbContextFactory<OrderDatabaseContext> dbCxtFactory;

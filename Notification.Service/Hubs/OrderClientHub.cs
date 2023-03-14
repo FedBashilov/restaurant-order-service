@@ -2,6 +2,7 @@
 
 namespace Notifications.Service.Hubs
 {
+    using Infrastructure.Auth.Constants;
     using Infrastructure.Core.Models;
     using Infrastructure.Core.Models.Responses;
     using Infrastructure.Database;
@@ -10,7 +11,7 @@ namespace Notifications.Service.Hubs
     using Microsoft.EntityFrameworkCore;
     using Notifications.Service;
 
-    [Authorize(Roles = "client")]
+    [Authorize(Roles = UserRoles.Client)]
     public class OrderClientHub : Hub
     {
         private readonly IDbContextFactory<OrderDatabaseContext> dbCxtFactory;
