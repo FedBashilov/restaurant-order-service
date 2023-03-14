@@ -12,10 +12,10 @@ namespace Infrastructure.Auth.Extentions
     {
         public static void AddAuthServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));
-            var secretKey = configuration.GetSection("JWTSettings:SecretKey").Value ?? throw new NullReferenceException("SecretKey can not be null");
-            var issuer = configuration.GetSection("JWTSettings:Issuer").Value ?? throw new NullReferenceException("Issuer can not be null");
-            var audience = configuration.GetSection("JWTSettings:Audience").Value ?? throw new NullReferenceException("Audience can not be null");
+            services.Configure<AccessTokenOptions>(configuration.GetSection("AccessTokenOptions"));
+            var secretKey = configuration.GetSection("AccessTokenOptions:SecretKey").Value ?? throw new NullReferenceException("SecretKey can not be null");
+            var issuer = configuration.GetSection("AccessTokenOptions:Issuer").Value ?? throw new NullReferenceException("Issuer can not be null");
+            var audience = configuration.GetSection("AccessTokenOptions:Audience").Value ?? throw new NullReferenceException("Audience can not be null");
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
             services.AddAuthentication(options =>

@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Auth
 {
-    public class JWTSettings
+    public class AccessTokenOptions
     {
         public string? SecretKey { get; set; }
 
