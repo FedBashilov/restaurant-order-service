@@ -13,6 +13,7 @@ namespace Orders.Service
             int offset = 0,
             int count = 100,
             bool orderDesc = false,
+            bool onlyActive = false,
             string? clientId = null);
 
         public Task<OrderResponse> GetOrder(

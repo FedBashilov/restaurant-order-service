@@ -50,7 +50,8 @@ namespace Web.Facade.Controllers
         public async Task<IActionResult> GetOrders(
             [FromQuery] int offset = 0,
             [FromQuery] int count = 100,
-            [FromQuery] bool orderDesc = false)
+            [FromQuery] bool orderDesc = false,
+            [FromQuery] bool onlyActive = false)
         {
             this.logger.LogInformation($"Starting to get all orders...");
 
@@ -60,7 +61,7 @@ namespace Web.Facade.Controllers
                 var role = JwtService.GetClaimValue(accessToken, ClaimTypes.Role);
                 var clientId = (role == UserRoles.Client) ? JwtService.GetClaimValue(accessToken, ClaimTypes.Actor) : null;
 
-                var orders = await this.orderService.GetOrders(accessToken, offset, count, orderDesc, clientId);
+                var orders = await this.orderService.GetOrders(accessToken, offset, count, orderDesc, onlyActive, clientId);
 
                 this.logger.LogInformation($"All orders received successfully! Orders: {JsonSerializer.Serialize(orders)}. Sending the orders in response...");
                 return this.Ok(orders);

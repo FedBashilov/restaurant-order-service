@@ -27,13 +27,18 @@ namespace Orders.Service
             int offset = 0,
             int count = 100,
             bool orderDesc = false,
+            bool onlyActive = false,
             string? clientId = null)
         {
             using var dbContext = dbCxtFactory.CreateDbContext();
 
-            var clientQuery = clientId != null ?
-                dbContext.Orders.Where(o => o.ClientId == clientId) :
+            var activeQuery = onlyActive ?
+                dbContext.Orders.Where(o => o.Status != OrderStatus.Closed && o.Status != OrderStatus.Canceled) :
                 dbContext.Orders;
+
+            var clientQuery = clientId != null ?
+                activeQuery.Where(o => o.ClientId == clientId) :
+                activeQuery;
 
             var orderQuery = orderDesc ?
                 clientQuery.OrderByDescending(x => x.Id) :
