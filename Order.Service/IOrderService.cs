@@ -12,7 +12,8 @@ namespace Orders.Service
             string accessToken,
             int offset = 0,
             int count = 100,
-            bool orderDesc = false);
+            bool orderDesc = false,
+            string? clientId = null);
 
         public Task<OrderResponse> GetOrder(
             int id,

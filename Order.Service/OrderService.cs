@@ -26,13 +26,18 @@ namespace Orders.Service
             string accessToken,
             int offset = 0,
             int count = 100,
-            bool orderDesc = false)
+            bool orderDesc = false,
+            string? clientId = null)
         {
             using var dbContext = dbCxtFactory.CreateDbContext();
 
+            var clientQuery = clientId != null ?
+                dbContext.Orders.Where(o => o.ClientId == clientId) :
+                dbContext.Orders;
+
             var orderQuery = orderDesc ?
-                dbContext.Orders.OrderByDescending(x => x.Id) :
-                dbContext.Orders.OrderBy(x => x.Id);
+                clientQuery.OrderByDescending(x => x.Id) :
+                clientQuery.OrderBy(x => x.Id);
 
             var pageQuery = orderQuery.Skip(offset).Take(count);
 

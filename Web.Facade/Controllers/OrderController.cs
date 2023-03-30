@@ -43,7 +43,7 @@ namespace Web.Facade.Controllers
             this.logger = logger;
         }
 
-        [Authorize(Roles = $"{UserRoles.Cook}, {UserRoles.Admin}")]
+        [Authorize(Roles = $"{UserRoles.Client}, {UserRoles.Cook}, {UserRoles.Admin}")]
         [HttpGet("")]
         [ProducesResponseType(200, Type = typeof(List<OrderResponse>))]
         [ProducesResponseType(500, Type = typeof(ErrorResponse))]
@@ -57,7 +57,10 @@ namespace Web.Facade.Controllers
             try
             {
                 var accessToken = await this.HttpContext.GetTokenAsync("access_token");
-                var orders = await this.orderService.GetOrders(accessToken, offset, count, orderDesc);
+                var role = JwtService.GetClaimValue(accessToken, ClaimTypes.Role);
+                var clientId = (role == UserRoles.Client) ? JwtService.GetClaimValue(accessToken, ClaimTypes.Actor) : null;
+
+                var orders = await this.orderService.GetOrders(accessToken, offset, count, orderDesc, clientId);
 
                 this.logger.LogInformation($"All orders received successfully! Orders: {JsonSerializer.Serialize(orders)}. Sending the orders in response...");
                 return this.Ok(orders);
