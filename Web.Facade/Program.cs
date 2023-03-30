@@ -2,7 +2,6 @@
 
 namespace Web.Facade
 {
-
     public class Program
     {
         public static void Main(string[] args)
