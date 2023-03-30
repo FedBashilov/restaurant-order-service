@@ -20,9 +20,9 @@ namespace Infrastructure.Menu.Services
             this.configuration = configuration;
         }
 
-        public async Task<List<MenuItem>> GetAllMenu(string accessToken)
+        public async Task<List<MenuItem>> GetAllMenu(string accessToken, bool onlyVisible = true)
         {
-            return await this.httpRequestFactory.GetHttpRequest<List<MenuItem>>(new Uri($"{this.configuration.Value.Url}/api/v1/menu"), accessToken);
+            return await this.httpRequestFactory.GetHttpRequest<List<MenuItem>>(new Uri($"{this.configuration.Value.Url}/api/v1/menu?onlyVisible={onlyVisible}"), accessToken);
         }
 
         public async Task<MenuItem> GetMenuItem(int id, string accessToken)
