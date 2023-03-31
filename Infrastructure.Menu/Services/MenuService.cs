@@ -29,5 +29,11 @@ namespace Infrastructure.Menu.Services
         {
             return await this.httpRequestFactory.GetHttpRequest<MenuItem>(new Uri($"{this.configuration.Value.Url}/api/v1/menu/{id}"), accessToken);
         }
+
+        public async Task<bool> IsMenuItemExist(int menuItemId, string accessToken)
+        {
+            var menuItem = await GetMenuItem(menuItemId, accessToken);
+            return menuItem != null;
+        }
     }
 }

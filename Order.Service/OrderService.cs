@@ -7,6 +7,7 @@ namespace Orders.Service
     using Infrastructure.Core.Models.DTOs;
     using Infrastructure.Core.Models.Responses;
     using Infrastructure.Database;
+    using Infrastructure.Menu.Models;
     using Infrastructure.Menu.Services;
     using Microsoft.EntityFrameworkCore;
     using Orders.Service.Exceptions;
@@ -52,7 +53,7 @@ namespace Orders.Service
 
             foreach (var order in orders)
             {
-                var orderResponse = await GetOrderResponse(order, dbContext, accessToken);
+                var orderResponse = await CreateOrderResponse(order, dbContext, accessToken);
 
                 ordersResponse.Add(orderResponse);
             }
@@ -69,7 +70,7 @@ namespace Orders.Service
                 throw new NotFoundException($"Not found order with id = {id}");
             }
 
-            var orderResponse = await GetOrderResponse(order, dbContext, accessToken);
+            var orderResponse = await CreateOrderResponse(order, dbContext, accessToken);
 
             return orderResponse;
         }
@@ -90,7 +91,7 @@ namespace Orders.Service
             {
                 foreach (var menuItem in orderDto.MenuItems)
                 {
-                    if (!await IsMenuItemExist(menuItem.MenuItemId, accessToken))
+                    if (!await this.menuService.IsMenuItemExist(menuItem.MenuItemId, accessToken))
                     {
                         throw new NotFoundException($"Menu item with id = {menuItem.MenuItemId} not found");
                     }
@@ -111,7 +112,7 @@ namespace Orders.Service
 
             await dbContext.SaveChangesAsync();
 
-            var orderResponse = await GetOrderResponse(order, dbContext, accessToken);
+            var orderResponse = await CreateOrderResponse(order, dbContext, accessToken);
 
             order.TotalPrice = orderResponse.TotalPrice;
 
@@ -139,12 +140,12 @@ namespace Orders.Service
             var newOrder = dbContext.Orders.Update(order).Entity;
             await dbContext.SaveChangesAsync();
 
-            var orderResponse = await GetOrderResponse(order, dbContext, accessToken);
+            var orderResponse = await CreateOrderResponse(order, dbContext, accessToken);
 
             return orderResponse;
         }
 
-        private async Task<OrderResponse> GetOrderResponse(Order order, OrderDatabaseContext dbContext, string accessToken)
+        private async Task<OrderResponse> CreateOrderResponse(Order order, OrderDatabaseContext dbContext, string accessToken)
         {
             var orderResponse = new OrderResponse()
             {
@@ -169,17 +170,11 @@ namespace Orders.Service
                     Price = menuItem.Price,
                     Amount = orderMenuItem.Amount
                 });
-
-                orderResponse.TotalPrice += menuItem.Price * orderMenuItem.Amount;
             }
 
-            return orderResponse;
-        }
+            orderResponse.CalculateTotalPrice();
 
-        private async Task<bool> IsMenuItemExist(int menuItemId, string accessToken)
-        {
-            var menuItem = await menuService.GetMenuItem(menuItemId, accessToken);
-            return menuItem != null;
+            return orderResponse;
         }
     }
 }

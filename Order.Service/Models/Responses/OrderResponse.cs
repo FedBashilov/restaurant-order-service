@@ -2,6 +2,8 @@
 
 namespace Infrastructure.Core.Models.Responses
 {
+    using Infrastructure.Menu.Models;
+
     public class OrderResponse
     {
         public int Id { get; set; }
@@ -17,5 +19,18 @@ namespace Infrastructure.Core.Models.Responses
         public string Status { get; set; }
 
         public int TotalPrice { get; set; }
+
+        public int CalculateTotalPrice()
+        {
+            if (TotalPrice == 0)
+            {
+                foreach (var menuItem in MenuItems)
+                {
+                    TotalPrice += menuItem.Price * menuItem.Amount;
+                }
+            }
+
+            return TotalPrice;
+        }
     }
 }

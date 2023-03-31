@@ -9,5 +9,7 @@ namespace Infrastructure.Menu.Services
         public Task<List<MenuItem>> GetAllMenu(string accessToken, bool onlyVisible = true);
 
         public Task<MenuItem> GetMenuItem(int id, string accessToken);
+
+        public Task<bool> IsMenuItemExist(int menuItemId, string accessToken);
     }
 }
