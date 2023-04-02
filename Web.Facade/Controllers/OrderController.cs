@@ -23,8 +23,8 @@ namespace Web.Facade.Controllers
     {
         private readonly IOrderService orderService;
 
-        private readonly IHubContext<OrderClientHub> clientHubCtx;
-        private readonly IHubContext<OrderCookHub> cookHubCtx;
+        private readonly IHubContext<ClientOrderHub> clientHubCtx;
+        private readonly IHubContext<CookOrderHub> cookHubCtx;
 
         private readonly IUserHubConnectionsRepository connRepo;
 
@@ -32,8 +32,8 @@ namespace Web.Facade.Controllers
 
         public OrderController(
             IOrderService orderService,
-            IHubContext<OrderClientHub> clientHubCtx,
-            IHubContext<OrderCookHub> cookHubCtx,
+            IHubContext<ClientOrderHub> clientHubCtx,
+            IHubContext<CookOrderHub> cookHubCtx,
             IUserHubConnectionsRepository connRepo,
             ILogger<OrderController> logger)
         {

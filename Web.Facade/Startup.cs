@@ -81,8 +81,8 @@ namespace Web.Facade
             {
                 endpoints.MapControllers();
 
-                endpoints.MapHub<OrderClientHub>("/notifications/client/orders");
-                endpoints.MapHub<OrderCookHub>("/notifications/cook/orders");
+                endpoints.MapHub<ClientOrderHub>("/notifications/client/orders");
+                endpoints.MapHub<CookOrderHub>("/notifications/cook/orders");
             });
         }
     }
