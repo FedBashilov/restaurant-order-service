@@ -9,6 +9,7 @@ namespace Web.Facade
     using Notifications.Service.Extentions;
     using Notifications.Service.Hubs;
     using Orders.Service.Extentions;
+    using Web.Facade.Middlewares;
 
     public class Startup
     {
@@ -68,6 +69,10 @@ namespace Web.Facade
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseMiddleware<HttpRequestBodyMiddleware>();
+            app.UseMiddleware<UnhandledExceptionMiddleware>();
+
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
