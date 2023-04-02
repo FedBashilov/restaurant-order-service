@@ -4,7 +4,7 @@ namespace Web.Facade
 {
     using Infrastructure.Auth.Extentions;
     using Infrastructure.Database.Extentions;
-    using Infrastructure.Menu;
+    using Infrastructure.Menu.Extentions;
     using Microsoft.OpenApi.Models;
     using Notifications.Service.Extentions;
     using Notifications.Service.Hubs;
