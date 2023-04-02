@@ -73,7 +73,7 @@ namespace Web.Facade.Controllers
             }
         }
 
-        [Authorize(Roles = $"{UserRoles.Cook}, {UserRoles.Admin}")]
+        [Authorize(Roles = $"{UserRoles.Client}, {UserRoles.Cook}, {UserRoles.Admin}")]
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(OrderResponse))]
         [ProducesResponseType(404)]
@@ -86,9 +86,20 @@ namespace Web.Facade.Controllers
             try
             {
                 var accessToken = await this.HttpContext.GetTokenAsync("access_token");
-                var order = await this.orderService.GetOrder(id, accessToken);
 
-                this.logger.LogInformation($"The order with id = {id} received successfully! order: {JsonSerializer.Serialize(order)}. Sending the order in response...");
+                var role = JwtService.GetClaimValue(accessToken, ClaimTypes.Role);
+                var clientId = JwtService.GetClaimValue(accessToken, ClaimTypes.Actor);
+
+                var order = await this.orderService.GetOrder(id, accessToken);
+                this.logger.LogInformation($"The order with id = {id} received successfully! order: {JsonSerializer.Serialize(order)}.");
+
+                if (role == UserRoles.Client && order.ClientId != clientId)
+                {
+                    this.logger.LogInformation($"Client with id {clientId} tried to get someone else's order. Sending 403 response...");
+                    return this.Forbid();
+                }
+
+                this.logger.LogInformation($"Sending the order in 200 response...");
                 return this.Ok(order);
             }
             catch (NotFoundException ex)
