@@ -11,11 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Auth", "Infr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Database", "Infrastructure.Database\Infrastructure.Database.csproj", "{DC112F6B-7398-4A29-9932-840B18A75015}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Core", "Infrastructure.Core\Infrastructure.Core.csproj", "{DACDD90E-ED4C-498A-A10D-CD3873A1D8DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Core", "Infrastructure.Core\Infrastructure.Core.csproj", "{DACDD90E-ED4C-498A-A10D-CD3873A1D8DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orders.Service", "Order.Service\Orders.Service.csproj", "{B3F639F4-3B7B-4987-9FB7-D9E170308365}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orders.Service", "Order.Service\Orders.Service.csproj", "{B3F639F4-3B7B-4987-9FB7-D9E170308365}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notifications.Service", "Notification.Service\Notifications.Service.csproj", "{03336B8D-13CA-44EA-ABF5-E7E06A9683A3}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared", "Shared\Shared.shproj", "{F3062310-9D1A-4838-8829-71052FDF3327}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,5 +59,15 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E962F47E-E851-4A01-B486-A0987E465F09}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Shared\Shared.projitems*{03336b8d-13ca-44ea-abf5-e7e06a9683a3}*SharedItemsImports = 5
+		Shared\Shared.projitems*{749e8a04-3505-4575-bf30-de351c1934b4}*SharedItemsImports = 5
+		Shared\Shared.projitems*{76daa6ba-9dcc-4b13-84a3-bc24e20ed80b}*SharedItemsImports = 5
+		Shared\Shared.projitems*{8a600001-e3b0-4c8b-8467-f6f7d0e8884f}*SharedItemsImports = 5
+		Shared\Shared.projitems*{b3f639f4-3b7b-4987-9fb7-d9e170308365}*SharedItemsImports = 5
+		Shared\Shared.projitems*{dacdd90e-ed4c-498a-a10d-cd3873a1d8db}*SharedItemsImports = 5
+		Shared\Shared.projitems*{dc112f6b-7398-4a29-9932-840b18a75015}*SharedItemsImports = 5
+		Shared\Shared.projitems*{f3062310-9d1a-4838-8829-71052fdf3327}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

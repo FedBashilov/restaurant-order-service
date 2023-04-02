@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="stylecop.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -28,4 +24,6 @@
     <ProjectReference Include="..\Notification.Service\Notifications.Service.csproj" />
     <ProjectReference Include="..\Order.Service\Orders.Service.csproj" />
   </ItemGroup>
+
+  <Import Project="..\Shared\Shared.projitems" Label="Shared" />
 </Project>

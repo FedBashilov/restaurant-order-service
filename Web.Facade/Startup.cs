@@ -4,11 +4,12 @@ namespace Web.Facade
 {
     using Infrastructure.Auth.Extentions;
     using Infrastructure.Database.Extentions;
-    using Infrastructure.Menu;
+    using Infrastructure.Menu.Extentions;
     using Microsoft.OpenApi.Models;
     using Notifications.Service.Extentions;
     using Notifications.Service.Hubs;
     using Orders.Service.Extentions;
+    using Web.Facade.Middlewares;
 
     public class Startup
     {
@@ -68,6 +69,10 @@ namespace Web.Facade
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseMiddleware<HttpRequestBodyMiddleware>();
+            app.UseMiddleware<UnhandledExceptionMiddleware>();
+
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
@@ -76,8 +81,8 @@ namespace Web.Facade
             {
                 endpoints.MapControllers();
 
-                endpoints.MapHub<OrderClientHub>("/notifications/client/orders");
-                endpoints.MapHub<OrderCookHub>("/notifications/cook/orders");
+                endpoints.MapHub<ClientOrderHub>("/notifications/client/orders");
+                endpoints.MapHub<CookOrderHub>("/notifications/cook/orders");
             });
         }
     }
