@@ -197,14 +197,19 @@ namespace Web.Facade.Controllers
             var clientConnectionIds = this.connRepo.GetConnectionIds(clientId);
             var notifyTasks = new List<Task>();
 
+            var messageStr = JsonSerializer.Serialize(message);
+
             foreach (var connectionId in clientConnectionIds)
             {
+                this.logger.LogInformation($"Notify client = {clientId} by connection = {connectionId} with message = {messageStr}.");
                 notifyTasks.Add(this.clientHubCtx.Clients.Client(connectionId).SendAsync("Notify", message));
             }
 
+            this.logger.LogInformation($"Notify all cooks with message = {messageStr}.");
             notifyTasks.Add(this.cookHubCtx.Clients.All.SendAsync("Notify", message));
 
             await Task.WhenAll(notifyTasks);
+            this.logger.LogInformation($"Message = {messageStr} sent to client = {clientId} and all cooks.");
         }
 
         private bool IsInputModelValid(out string? errorMessage)
@@ -215,7 +220,7 @@ namespace Web.Facade.Controllers
                     .SelectMany(state => state.Value.Errors)
                     .Aggregate(string.Empty, (current, error) => current + (error.ErrorMessage + ". "));
 
-                this.logger.LogInformation($"Invalid input parameters. {errorMessage}");
+                this.logger.LogInformation($"Invalid input parameters. {errorMessage}.");
                 return false;
             }
 
