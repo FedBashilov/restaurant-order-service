@@ -50,8 +50,8 @@ namespace Web.Facade.Controllers
         [ProducesResponseType(200, Type = typeof(List<OrderResponse>))]
         [ProducesResponseType(500, Type = typeof(ErrorResponse))]
         public async Task<IActionResult> GetOrders(
-            [FromQuery] int offset = 0,
-            [FromQuery] int count = 100,
+            [FromQuery][Range(0, int.MaxValue)] int offset = 0,
+            [FromQuery][Range(1, int.MaxValue)] int count = 100,
             [FromQuery] bool orderDesc = false,
             [FromQuery] bool onlyActive = false)
         {
