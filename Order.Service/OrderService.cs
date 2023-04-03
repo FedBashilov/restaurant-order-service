@@ -24,14 +24,14 @@ namespace Orders.Service
         }
 
         public async Task<IEnumerable<OrderResponse>> GetOrders(
-            string accessToken,
+            string? accessToken,
             int offset = 0,
             int count = 100,
             bool orderDesc = false,
             bool onlyActive = false,
             string? clientId = null)
         {
-            using var dbContext = dbCxtFactory.CreateDbContext();
+            using var dbContext = this.dbCxtFactory.CreateDbContext();
 
             var activeQuery = onlyActive ?
                 dbContext.Orders.Where(o => o.Status != OrderStatus.Closed && o.Status != OrderStatus.Canceled) :
@@ -53,7 +53,7 @@ namespace Orders.Service
 
             foreach (var order in orders)
             {
-                var orderResponse = await CreateOrderResponse(order, dbContext, accessToken);
+                var orderResponse = await this.CreateOrderResponse(order, dbContext, accessToken);
 
                 ordersResponse.Add(orderResponse);
             }
@@ -61,21 +61,21 @@ namespace Orders.Service
             return ordersResponse;
         }
 
-        public async Task<OrderResponse> GetOrder(int id, string accessToken)
+        public async Task<OrderResponse> GetOrder(int id, string? accessToken)
         {
-            using var dbContext = dbCxtFactory.CreateDbContext();
+            using var dbContext = this.dbCxtFactory.CreateDbContext();
             var order = await dbContext.Orders.FindAsync(id);
             if (order == null)
             {
                 throw new NotFoundException($"Not found order with id = {id}");
             }
 
-            var orderResponse = await CreateOrderResponse(order, dbContext, accessToken);
+            var orderResponse = await this.CreateOrderResponse(order, dbContext, accessToken);
 
             return orderResponse;
         }
 
-        public async Task<OrderResponse> CreateOrder(CreateOrderDTO orderDto, string clientId, string accessToken)
+        public async Task<OrderResponse> CreateOrder(CreateOrderDTO orderDto, string clientId, string? accessToken)
         {
             var newOrder = new Order()
             {
@@ -84,7 +84,7 @@ namespace Orders.Service
                 CreatedDate = DateTime.UtcNow,
             };
 
-            using var dbContext = dbCxtFactory.CreateDbContext();
+            using var dbContext = this.dbCxtFactory.CreateDbContext();
             var order = dbContext.Orders.Add(newOrder).Entity;
 
             if (orderDto.MenuItems != null)
@@ -105,14 +105,14 @@ namespace Orders.Service
                     {
                         MenuItemId = menuItem.MenuItemId,
                         Amount = menuItem.Amount,
-                        OrderId = order.Id
+                        OrderId = order.Id,
                     });
                 }
             }
 
             await dbContext.SaveChangesAsync();
 
-            var orderResponse = await CreateOrderResponse(order, dbContext, accessToken);
+            var orderResponse = await this.CreateOrderResponse(order, dbContext, accessToken);
 
             order.TotalPrice = orderResponse.TotalPrice;
 
@@ -121,9 +121,9 @@ namespace Orders.Service
             return orderResponse;
         }
 
-        public async Task<OrderResponse> UpdateOrderStatus(int id, OrderStatus newStatus, string accessToken)
+        public async Task<OrderResponse> UpdateOrderStatus(int id, OrderStatus newStatus, string? accessToken)
         {
-            using var dbContext = dbCxtFactory.CreateDbContext();
+            using var dbContext = this.dbCxtFactory.CreateDbContext();
             var order = await dbContext.Orders.FindAsync(id);
             if (order == null)
             {
@@ -140,12 +140,12 @@ namespace Orders.Service
             var newOrder = dbContext.Orders.Update(order).Entity;
             await dbContext.SaveChangesAsync();
 
-            var orderResponse = await CreateOrderResponse(order, dbContext, accessToken);
+            var orderResponse = await this.CreateOrderResponse(order, dbContext, accessToken);
 
             return orderResponse;
         }
 
-        private async Task<OrderResponse> CreateOrderResponse(Order order, OrderDatabaseContext dbContext, string accessToken)
+        private async Task<OrderResponse> CreateOrderResponse(Order order, OrderDatabaseContext dbContext, string? accessToken)
         {
             var orderResponse = new OrderResponse()
             {
@@ -155,20 +155,20 @@ namespace Orders.Service
                 CloseDate = order.CloseDate,
                 Status = order.Status.ToString(),
                 TotalPrice = order.TotalPrice,
-                MenuItems = new List<OrderMenuItemResponse>()
+                MenuItems = new List<OrderMenuItemResponse>(),
             };
 
             var orderMenuItems = dbContext.OrderMenuItems.Where(omi => omi.OrderId == order.Id);
             foreach (var orderMenuItem in orderMenuItems)
             {
-                var menuItem = await menuService.GetMenuItem(orderMenuItem.MenuItemId, accessToken);
+                var menuItem = await this.menuService.GetMenuItem(orderMenuItem.MenuItemId, accessToken);
 
                 orderResponse.MenuItems.Add(new OrderMenuItemResponse()
                 {
                     Id = menuItem.Id,
                     Name = menuItem.Name,
                     Price = menuItem.Price,
-                    Amount = orderMenuItem.Amount
+                    Amount = orderMenuItem.Amount,
                 });
             }
 

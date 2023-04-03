@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Menu
+﻿// Copyright (c) Fedor Bashilov. All rights reserved.
+
+namespace Infrastructure.Menu
 {
     public class MenuConfig
     {

@@ -8,7 +8,7 @@ namespace Web.Facade.Middlewares
 
     public class UnhandledExceptionMiddleware
     {
-        private readonly ILogger logger;
+        private readonly ILogger<UnhandledExceptionMiddleware> logger;
         private readonly RequestDelegate next;
 
         public UnhandledExceptionMiddleware(ILogger<UnhandledExceptionMiddleware> logger, RequestDelegate next)

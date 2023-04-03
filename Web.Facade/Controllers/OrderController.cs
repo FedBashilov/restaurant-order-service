@@ -3,6 +3,7 @@
 namespace Web.Facade.Controllers
 {
     using System.ComponentModel.DataAnnotations;
+    using System.Diagnostics.CodeAnalysis;
     using System.Text.Json;
     using Infrastructure.Auth.Constants;
     using Infrastructure.Auth.Services;
@@ -44,7 +45,6 @@ namespace Web.Facade.Controllers
             this.logger = logger;
         }
 
-        [LoggerMessage]
         [Authorize(Roles = $"{UserRoles.Client}, {UserRoles.Cook}, {UserRoles.Admin}")]
         [HttpGet("")]
         [ProducesResponseType(200, Type = typeof(List<OrderResponse>))]
@@ -171,7 +171,7 @@ namespace Web.Facade.Controllers
 
                 var order = await this.orderService.UpdateOrderStatus(id, updateDto.Status.ToOrderStatus(), accessToken);
 
-                await this.NotifyClientAndCooks(order.ClientId, order);
+                await this.NotifyClientAndCooks(order.ClientId!, order);
 
                 return this.Ok(order);
             }
@@ -212,12 +212,12 @@ namespace Web.Facade.Controllers
             this.logger.LogInformation($"Message = {messageStr} sent to client = {clientId} and all cooks.");
         }
 
-        private bool IsInputModelValid(out string? errorMessage)
+        private bool IsInputModelValid([NotNullWhen(false)] out string? errorMessage)
         {
             if (!this.ModelState.IsValid)
             {
                 errorMessage = this.ModelState
-                    .SelectMany(state => state.Value.Errors)
+                    .SelectMany(state => state.Value!.Errors)
                     .Aggregate(string.Empty, (current, error) => current + (error.ErrorMessage + ". "));
 
                 this.logger.LogInformation($"Invalid input parameters. {errorMessage}.");

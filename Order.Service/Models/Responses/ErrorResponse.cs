@@ -6,7 +6,7 @@ namespace Infrastructure.Core.Models.Responses
     {
         public ErrorResponse(string message)
         {
-            Message = message;
+            this.Message = message;
         }
 
         public string? Message { get; set; }

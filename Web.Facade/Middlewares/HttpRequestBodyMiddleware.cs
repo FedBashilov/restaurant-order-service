@@ -9,7 +9,7 @@ namespace Web.Facade.Middlewares
 
     public class HttpRequestBodyMiddleware
     {
-        private readonly ILogger logger;
+        private readonly ILogger<HttpRequestBodyMiddleware> logger;
         private readonly RequestDelegate next;
 
         public HttpRequestBodyMiddleware(
@@ -30,7 +30,7 @@ namespace Web.Facade.Middlewares
             this.logger.LogInformation(
                       $"Request {context.Request?.Method}: {context.Request?.Path.Value}\n{body}");
 
-            context.Request.Body.Position = 0L;
+            context.Request!.Body.Position = 0L;
 
             await this.next(context);
         }
