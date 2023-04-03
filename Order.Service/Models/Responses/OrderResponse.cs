@@ -2,6 +2,7 @@
 
 namespace Infrastructure.Core.Models.Responses
 {
+    using System.Diagnostics.CodeAnalysis;
     using Infrastructure.Menu.Models;
 
     public class OrderResponse
@@ -16,21 +17,21 @@ namespace Infrastructure.Core.Models.Responses
 
         public DateTime CloseDate { get; set; }
 
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
         public int TotalPrice { get; set; }
 
         public int CalculateTotalPrice()
         {
-            if (TotalPrice == 0)
+            if (this.TotalPrice == 0 && this.MenuItems != null)
             {
-                foreach (var menuItem in MenuItems)
+                foreach (var menuItem in this.MenuItems)
                 {
-                    TotalPrice += menuItem.Price * menuItem.Amount;
+                    this.TotalPrice += menuItem.Price * menuItem.Amount;
                 }
             }
 
-            return TotalPrice;
+            return this.TotalPrice;
         }
     }
 }

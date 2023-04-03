@@ -2,11 +2,12 @@
 
 namespace Infrastructure.Auth.Services
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.IdentityModel.Tokens.Jwt;
 
     public static class JwtService
     {
-        public static string GetClaimValue(string jwtTokenEncoded, string claimType)
+        public static string GetClaimValue(string? jwtTokenEncoded, string claimType)
         {
             var accessToken = new JwtSecurityToken(jwtTokenEncoded);
             var userRole = accessToken.Claims.First(x => x.Type == claimType).Value;

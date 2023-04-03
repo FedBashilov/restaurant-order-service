@@ -9,7 +9,7 @@ namespace Orders.Service
     public interface IOrderService
     {
         public Task<IEnumerable<OrderResponse>> GetOrders(
-            string accessToken,
+            string? accessToken,
             int offset = 0,
             int count = 100,
             bool orderDesc = false,
@@ -18,16 +18,16 @@ namespace Orders.Service
 
         public Task<OrderResponse> GetOrder(
             int id,
-            string accessToken);
+            string? accessToken);
 
         public Task<OrderResponse> CreateOrder(
             CreateOrderDTO newOrder,
             string clientId,
-            string accessToken);
+            string? accessToken);
 
         public Task<OrderResponse> UpdateOrderStatus(
             int id,
             OrderStatus newStatus,
-            string accessToken);
+            string? accessToken);
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Infrastructure.Menu
 {
-    using Infrastructure.Menu.Exceptions;
     using System.Net.Http.Headers;
     using System.Text.Json;
+    using Infrastructure.Menu.Exceptions;
 
     internal class HttpRequestFactory : IHttpRequestFactory
     {
@@ -18,7 +18,7 @@ namespace Infrastructure.Menu
             var httpRequestMessage = new HttpRequestMessage(
                 HttpMethod.Get,
                 url);
-            if(accessToken != default)
+            if (accessToken != default)
             {
                 httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             }
@@ -33,10 +33,10 @@ namespace Infrastructure.Menu
 
             var response = JsonSerializer.Deserialize<T>(contentString, new JsonSerializerOptions()
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             });
 
-            return response;
+            return response!;
         }
 
         public async Task<T> PostHttpRequest<T>(Uri url, string serializedBody, string? accessToken = default)
@@ -48,6 +48,7 @@ namespace Infrastructure.Menu
             {
                 httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             }
+
             httpRequestMessage.Content = new StringContent(serializedBody);
 
             var httpClient = this.httpClientFactory.CreateClient();
@@ -60,11 +61,12 @@ namespace Infrastructure.Menu
 
             var response = JsonSerializer.Deserialize<T>(contentString, new JsonSerializerOptions()
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             });
 
-            return response;
+            return response!;
         }
+
         public async Task<T> PutHttpRequest<T>(Uri url, string serializedBody, string? accessToken = default)
         {
             var httpRequestMessage = new HttpRequestMessage(
@@ -74,6 +76,7 @@ namespace Infrastructure.Menu
             {
                 httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             }
+
             httpRequestMessage.Content = new StringContent(serializedBody);
 
             var httpClient = this.httpClientFactory.CreateClient();
@@ -86,10 +89,10 @@ namespace Infrastructure.Menu
 
             var response = JsonSerializer.Deserialize<T>(contentString, new JsonSerializerOptions()
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             });
 
-            return response;
+            return response!;
         }
 
         public async Task DeleteHttpRequest(Uri url, string? accessToken = default)

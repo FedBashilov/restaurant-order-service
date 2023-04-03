@@ -2,10 +2,10 @@
 
 namespace Infrastructure.Menu.Services
 {
-    using Infrastructure.Menu.Models;
-    using Microsoft.Extensions.Options;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Infrastructure.Menu.Models;
+    using Microsoft.Extensions.Options;
 
     public class MenuService : IMenuService
     {
@@ -20,19 +20,19 @@ namespace Infrastructure.Menu.Services
             this.configuration = configuration;
         }
 
-        public async Task<List<MenuItem>> GetAllMenu(string accessToken, bool onlyVisible = true)
+        public async Task<List<MenuItem>> GetAllMenu(string? accessToken, bool onlyVisible = true)
         {
             return await this.httpRequestFactory.GetHttpRequest<List<MenuItem>>(new Uri($"{this.configuration.Value.Url}/api/v1/menu?onlyVisible={onlyVisible}"), accessToken);
         }
 
-        public async Task<MenuItem> GetMenuItem(int id, string accessToken)
+        public async Task<MenuItem> GetMenuItem(int id, string? accessToken)
         {
             return await this.httpRequestFactory.GetHttpRequest<MenuItem>(new Uri($"{this.configuration.Value.Url}/api/v1/menu/{id}"), accessToken);
         }
 
-        public async Task<bool> IsMenuItemExist(int menuItemId, string accessToken)
+        public async Task<bool> IsMenuItemExist(int menuItemId, string? accessToken)
         {
-            var menuItem = await GetMenuItem(menuItemId, accessToken);
+            var menuItem = await this.GetMenuItem(menuItemId, accessToken);
             return menuItem != null;
         }
     }
