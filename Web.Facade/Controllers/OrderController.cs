@@ -169,7 +169,7 @@ namespace Web.Facade.Controllers
             {
                 var accessToken = await this.HttpContext.GetTokenAsync("access_token");
 
-                var order = await this.orderService.UpdateOrderStatus(id, updateDto.Status.ToOrderStatus(), accessToken);
+                var order = await this.orderService.UpdateOrderStatus(id, updateDto.Status!.ToOrderStatus(), accessToken);
 
                 await this.NotifyClientAndCooks(order.ClientId!, order);
 
