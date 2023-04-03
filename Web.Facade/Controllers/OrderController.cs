@@ -72,7 +72,7 @@ namespace Web.Facade.Controllers
             }
             catch (Exception ex)
             {
-                this.logger.LogWarning(ex, $"Can't get orders. {ex.Message}.");
+                this.logger.LogError(ex, $"Can't get orders. {ex.Message}.");
                 return this.StatusCode(500, new ErrorResponse($"Can't get orders. Unexpected error."));
             }
         }
@@ -96,7 +96,7 @@ namespace Web.Facade.Controllers
 
                 if (role == UserRoles.Client && order.ClientId != clientId)
                 {
-                    this.logger.LogInformation($"Client with id {clientId} tried to get someone else's order.");
+                    this.logger.LogWarning($"Client with id {clientId} tried to get someone else's order.");
                     return this.Forbid();
                 }
 
@@ -109,7 +109,7 @@ namespace Web.Facade.Controllers
             }
             catch (Exception ex)
             {
-                this.logger.LogWarning(ex, $"Can't get order. {ex.Message}.");
+                this.logger.LogError(ex, $"Can't get order. {ex.Message}.");
                 return this.StatusCode(500, new ErrorResponse($"Can't get order. Unexpected error."));
             }
         }
@@ -145,7 +145,7 @@ namespace Web.Facade.Controllers
             }
             catch (Exception ex)
             {
-                this.logger.LogWarning(ex, $"Can't create order. {ex.Message}.");
+                this.logger.LogError(ex, $"Can't create order. {ex.Message}.");
                 return this.StatusCode(500, new ErrorResponse($"Can't create order. Unexpected error."));
             }
         }
@@ -187,7 +187,7 @@ namespace Web.Facade.Controllers
             }
             catch (Exception ex)
             {
-                this.logger.LogWarning(ex, $"Can't update order status. {ex.Message}.");
+                this.logger.LogError(ex, $"Can't update order status. {ex.Message}.");
                 return this.StatusCode(500, new ErrorResponse($"Can't update order status. Unexpected error."));
             }
         }
@@ -220,7 +220,7 @@ namespace Web.Facade.Controllers
                     .SelectMany(state => state.Value!.Errors)
                     .Aggregate(string.Empty, (current, error) => current + (error.ErrorMessage + ". "));
 
-                this.logger.LogInformation($"Invalid input parameters. {errorMessage}.");
+                this.logger.LogWarning($"Invalid input parameters. {errorMessage}.");
                 return false;
             }
 
