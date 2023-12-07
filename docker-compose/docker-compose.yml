@@ -1,0 +1,33 @@
+version: '3.5'
+name: order_service
+
+services:
+    web.facade:
+        container_name: order_webfacade
+        image: order_webfacade
+        ports:
+            - "5029:80"
+        build: '../'
+        environment:
+            ConnectionStrings__DatabaseConnection: 'Data Source=order_db; Initial Catalog=OrderService; User ID=SA; Password=Adminadmin1@'
+            MenuService__Url: 'http://menu_webfacade'
+        depends_on:
+            - db
+        networks:
+            - app_bridge_network
+    db:
+        container_name: order_db
+        image: "mcr.microsoft.com/mssql/server:2019-latest"
+        ports:
+            - "1435:1433"
+        environment:
+            - ACCEPT_EULA=y
+            - MSSQL_SA_PASSWORD=Adminadmin1@
+        networks:
+            - app_bridge_network
+
+networks:
+    app_bridge_network:
+        name: app_bridge_network
+        driver: bridge
+        external: true
