@@ -2,12 +2,10 @@
 
 namespace Orders.Service
 {
-    using Infrastructure.Core.Extentions;
     using Infrastructure.Core.Models;
     using Infrastructure.Core.Models.DTOs;
     using Infrastructure.Core.Models.Responses;
     using Infrastructure.Database;
-    using Infrastructure.Menu.Models;
     using Infrastructure.Menu.Services;
     using Microsoft.EntityFrameworkCore;
     using Orders.Service.Exceptions;

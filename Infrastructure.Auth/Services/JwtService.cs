@@ -2,7 +2,6 @@
 
 namespace Infrastructure.Auth.Services
 {
-    using System.Diagnostics.CodeAnalysis;
     using System.IdentityModel.Tokens.Jwt;
 
     public static class JwtService

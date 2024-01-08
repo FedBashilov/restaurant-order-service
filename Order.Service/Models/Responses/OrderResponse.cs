@@ -2,9 +2,6 @@
 
 namespace Infrastructure.Core.Models.Responses
 {
-    using System.Diagnostics.CodeAnalysis;
-    using Infrastructure.Menu.Models;
-
     public class OrderResponse
     {
         public int Id { get; set; }
