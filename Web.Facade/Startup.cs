@@ -2,6 +2,7 @@
 
 namespace Web.Facade
 {
+    using Firebase.Service.Extentions;
     using Infrastructure.Auth.Extentions;
     using Infrastructure.Database.Extentions;
     using Infrastructure.Menu.Extentions;
@@ -25,6 +26,7 @@ namespace Web.Facade
             services.AddDatabaseServices(this.Configuration);
             services.AddAuthServices(this.Configuration);
             services.AddMenuServices(this.Configuration);
+            services.AddFirebaseServices();
             services.AddNotificationServices();
             services.AddOrderServices();
 

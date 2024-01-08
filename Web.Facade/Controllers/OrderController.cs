@@ -5,6 +5,7 @@ namespace Web.Facade.Controllers
     using System.ComponentModel.DataAnnotations;
     using System.Diagnostics.CodeAnalysis;
     using System.Text.Json;
+    using Firebase.Service;
     using Infrastructure.Auth.Constants;
     using Infrastructure.Auth.Services;
     using Infrastructure.Core.Extentions;
@@ -23,6 +24,7 @@ namespace Web.Facade.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderService orderService;
+        private readonly IFbNotificationService firebaseService;
 
         private readonly IHubContext<ClientOrderHub> clientHubCtx;
         private readonly IHubContext<CookOrderHub> cookHubCtx;
@@ -33,12 +35,14 @@ namespace Web.Facade.Controllers
 
         public OrderController(
             IOrderService orderService,
+            IFbNotificationService firebaseService,
             IHubContext<ClientOrderHub> clientHubCtx,
             IHubContext<CookOrderHub> cookHubCtx,
             IUserHubConnectionsRepository connRepo,
             ILogger<OrderController> logger)
         {
             this.orderService = orderService;
+            this.firebaseService = firebaseService;
             this.clientHubCtx = clientHubCtx;
             this.cookHubCtx = cookHubCtx;
             this.connRepo = connRepo;
@@ -134,7 +138,19 @@ namespace Web.Facade.Controllers
 
                 var order = await this.orderService.CreateOrder(newOrder, clientId, accessToken);
 
-                await this.NotifyClientAndCooks(clientId, order);
+                var notifyTasks = new Task[]
+                {
+                    this.NotifyClientAndCooks(clientId, order),
+                    this.firebaseService.SendMessage(
+                        order.ClientId!,
+                        JsonSerializer.Serialize(order, new JsonSerializerOptions
+                        {
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                        }),
+                        "orderCreate"),
+                };
+
+                await Task.WhenAll(notifyTasks);
 
                 return this.StatusCode(201, order);
             }
@@ -171,7 +187,19 @@ namespace Web.Facade.Controllers
 
                 var order = await this.orderService.UpdateOrderStatus(id, updateDto.Status!.ToOrderStatus(), accessToken);
 
-                await this.NotifyClientAndCooks(order.ClientId!, order);
+                var notifyTasks = new Task[]
+                {
+                    this.NotifyClientAndCooks(order.ClientId!, order),
+                    this.firebaseService.SendMessage(
+                        order.ClientId!,
+                        JsonSerializer.Serialize(order, new JsonSerializerOptions
+                        {
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                        }),
+                        "orderStatusUpdate"),
+                };
+
+                await Task.WhenAll(notifyTasks);
 
                 return this.Ok(order);
             }

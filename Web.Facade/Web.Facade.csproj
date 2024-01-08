@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Firebase.Service\Firebase.Service.csproj" />
     <ProjectReference Include="..\Infrastructure.Menu\Infrastructure.Menu.csproj" />
     <ProjectReference Include="..\Notification.Service\Notifications.Service.csproj" />
     <ProjectReference Include="..\Order.Service\Orders.Service.csproj" />
