@@ -3,7 +3,6 @@
 namespace Firebase.Service
 {
     using Microsoft.Extensions.Logging;
-    using Newtonsoft.Json.Linq;
     using StackExchange.Redis;
 
     public class FbTokenService : IFbTokenService
@@ -25,7 +24,7 @@ namespace Firebase.Service
 
         public async Task SetFbToken(string clientId, string fbToken)
         {
-            await this.redisDb.StringSetAsync(clientId, fbToken);
+            await this.redisDb.StringSetAsync(clientId, fbToken, TimeSpan.FromDays(60));
             this.logger.LogInformation("Sent message to Redis: " + clientId, fbToken);
         }
     }
