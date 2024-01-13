@@ -11,5 +11,7 @@ namespace Infrastructure.Menu.Models
         public int Price { get; set; }
 
         public bool Visible { get; set; } = true;
+
+        public string? ImageUrl { get; set; }
     }
 }

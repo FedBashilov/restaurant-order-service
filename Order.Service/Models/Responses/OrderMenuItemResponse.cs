@@ -8,6 +8,8 @@ namespace Infrastructure.Core.Models.Responses
 
         public string? Name { get; set; }
 
+        public string? ImageUrl { get; set; }
+
         public int Price { get; set; }
 
         public int Amount { get; set; }

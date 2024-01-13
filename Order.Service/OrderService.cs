@@ -165,6 +165,7 @@ namespace Orders.Service
                 {
                     Id = menuItem.Id,
                     Name = menuItem.Name,
+                    ImageUrl = menuItem.ImageUrl,
                     Price = menuItem.Price,
                     Amount = orderMenuItem.Amount,
                 });
