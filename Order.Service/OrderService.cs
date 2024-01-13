@@ -6,6 +6,7 @@ namespace Orders.Service
     using Infrastructure.Core.Models.DTOs;
     using Infrastructure.Core.Models.Responses;
     using Infrastructure.Database;
+    using Infrastructure.Menu.Models;
     using Infrastructure.Menu.Services;
     using Microsoft.EntityFrameworkCore;
     using Orders.Service.Exceptions;
@@ -29,7 +30,7 @@ namespace Orders.Service
             bool onlyActive = false,
             string? clientId = null)
         {
-            using var dbContext = this.dbCxtFactory.CreateDbContext();
+            await using var dbContext = this.dbCxtFactory.CreateDbContext();
 
             var activeQuery = onlyActive ?
                 dbContext.Orders.Where(o => o.Status != OrderStatus.Closed && o.Status != OrderStatus.Canceled) :
@@ -47,21 +48,21 @@ namespace Orders.Service
 
             var orders = await pageQuery.ToListAsync();
 
-            var ordersResponse = new List<OrderResponse>();
+            var orderTasks = new List<Task<OrderResponse>>();
 
             foreach (var order in orders)
             {
-                var orderResponse = await this.CreateOrderResponse(order, dbContext, accessToken);
-
-                ordersResponse.Add(orderResponse);
+                orderTasks.Add(this.CreateOrderResponse(order, dbContext, accessToken));
             }
+
+            var ordersResponse = await Task.WhenAll(orderTasks);
 
             return ordersResponse;
         }
 
         public async Task<OrderResponse> GetOrder(int id, string? accessToken)
         {
-            using var dbContext = this.dbCxtFactory.CreateDbContext();
+            await using var dbContext = this.dbCxtFactory.CreateDbContext();
             var order = await dbContext.Orders.FindAsync(id);
             if (order == null)
             {
@@ -82,7 +83,7 @@ namespace Orders.Service
                 CreatedDate = DateTime.UtcNow,
             };
 
-            using var dbContext = this.dbCxtFactory.CreateDbContext();
+            await using var dbContext = this.dbCxtFactory.CreateDbContext();
             var order = dbContext.Orders.Add(newOrder).Entity;
 
             if (orderDto.MenuItems != null)
@@ -121,7 +122,7 @@ namespace Orders.Service
 
         public async Task<OrderResponse> UpdateOrderStatus(int id, OrderStatus newStatus, string? accessToken)
         {
-            using var dbContext = this.dbCxtFactory.CreateDbContext();
+            await using var dbContext = this.dbCxtFactory.CreateDbContext();
             var order = await dbContext.Orders.FindAsync(id);
             if (order == null)
             {
@@ -156,18 +157,25 @@ namespace Orders.Service
                 MenuItems = new List<OrderMenuItemResponse>(),
             };
 
-            var orderMenuItems = dbContext.OrderMenuItems.Where(omi => omi.OrderId == order.Id);
+            var menuItemTasks = new List<Task<MenuItem>>();
+
+            var orderMenuItems = dbContext.OrderMenuItems.Where(omi => omi.OrderId == order.Id).ToList();
             foreach (var orderMenuItem in orderMenuItems)
             {
-                var menuItem = await this.menuService.GetMenuItem(orderMenuItem.MenuItemId, accessToken);
+                menuItemTasks.Add(this.menuService.GetMenuItem(orderMenuItem.MenuItemId, accessToken));
+            }
 
+            var menuItems = await Task.WhenAll(menuItemTasks);
+
+            for (var i = 0; i < menuItems.Length; i++)
+            {
                 orderResponse.MenuItems.Add(new OrderMenuItemResponse()
                 {
-                    Id = menuItem.Id,
-                    Name = menuItem.Name,
-                    ImageUrl = menuItem.ImageUrl,
-                    Price = menuItem.Price,
-                    Amount = orderMenuItem.Amount,
+                    Id = menuItems[i].Id,
+                    Name = menuItems[i].Name,
+                    ImageUrl = menuItems[i].ImageUrl,
+                    Price = menuItems[i].Price,
+                    Amount = orderMenuItems[i].Amount,
                 });
             }
 
