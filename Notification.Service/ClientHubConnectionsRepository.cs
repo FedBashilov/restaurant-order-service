@@ -1,5 +1,7 @@
 ﻿// Copyright (c) Fedor Bashilov. All rights reserved.
 
+using Notifications.Service.Interfaces;
+
 namespace Notifications.Service
 {
     public class ClientHubConnectionsRepository : IUserHubConnectionsRepository

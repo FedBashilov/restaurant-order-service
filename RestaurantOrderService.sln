@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Facade", "Web.Facade\Web.Facade.csproj", "{749E8A04-3505-4575-BF30-DE351C1934B4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8A600001-E3B0-4C8B-8467-F6F7D0E8884F} = {8A600001-E3B0-4C8B-8467-F6F7D0E8884F}
+		{DACDD90E-ED4C-498A-A10D-CD3873A1D8DB} = {DACDD90E-ED4C-498A-A10D-CD3873A1D8DB}
+		{DC112F6B-7398-4A29-9932-840B18A75015} = {DC112F6B-7398-4A29-9932-840B18A75015}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Menu", "Infrastructure.Menu\Infrastructure.Menu.csproj", "{76DAA6BA-9DCC-4B13-84A3-BC24E20ED80B}"
 EndProject

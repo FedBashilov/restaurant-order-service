@@ -2,25 +2,27 @@
 
 namespace Infrastructure.Core.Models.Responses
 {
-    public class OrderResponse
+    public record OrderResponse
     {
-        public int Id { get; set; }
+        public int Id { get; init; }
 
-        public ICollection<OrderMenuItemResponse>? MenuItems { get; set; }
+        public ICollection<OrderMenuItemResponse>? MenuItems { get; init; }
 
-        public string? ClientId { get; set; }
+        public string? ClientId { get; init; }
 
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; init; }
 
-        public DateTime CloseDate { get; set; }
+        public DateTime CloseDate { get; init; }
 
-        public string? Status { get; set; }
+        public string? Status { get; init; }
 
         public int TotalPrice { get; set; }
 
         public int CalculateTotalPrice()
         {
-            if (this.TotalPrice == 0 && this.MenuItems != null)
+            this.TotalPrice = 0;
+
+            if (this.MenuItems != null)
             {
                 foreach (var menuItem in this.MenuItems)
                 {

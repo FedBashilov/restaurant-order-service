@@ -2,10 +2,10 @@
 
 namespace Firebase.Service.Models.Responses
 {
-    public class FbTokenResponse
+    public record FbTokenResponse
     {
-        public string? ClientId { get; set; }
+        public string? ClientId { get; init; }
 
-        public string? FirebaseToken { get; set; }
+        public string? FirebaseToken { get; init; }
     }
 }

@@ -3,7 +3,7 @@
 namespace Web.Facade.Controllers
 {
     using System.Diagnostics.CodeAnalysis;
-    using Firebase.Service;
+    using Firebase.Service.Interfaces;
     using Firebase.Service.Models.DTOs;
     using Firebase.Service.Models.Responses;
     using Infrastructure.Auth.Constants;
@@ -42,7 +42,7 @@ namespace Web.Facade.Controllers
             try
             {
                 var accessToken = await this.HttpContext.GetTokenAsync("access_token");
-                var clientId = JwtService.GetClaimValue(accessToken, "http://schemas.xmlsoap.org/ws/2009/09/identity/claims/actor");
+                var clientId = JwtService.GetClaimValue(accessToken, ClaimTypes.Actor);
 
                 await this.fbTokenService.SetFbToken(clientId, fbTokenDTO.FirebaseToken!);
 

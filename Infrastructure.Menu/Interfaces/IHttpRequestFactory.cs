@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Fedor Bashilov. All rights reserved.
 
-namespace Infrastructure.Menu
+namespace Infrastructure.Menu.Interfaces
 {
     public interface IHttpRequestFactory
     {

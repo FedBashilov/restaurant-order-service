@@ -2,47 +2,68 @@
 
 namespace Firebase.Service
 {
+    using Firebase.Service.Interfaces;
+    using Firebase.Service.Settings;
     using FirebaseAdmin;
     using FirebaseAdmin.Messaging;
     using Google.Apis.Auth.OAuth2;
     using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
 
     public class FbNotificationService : IFbNotificationService
     {
         private readonly IFbTokenService fbTokenService;
+        private readonly FirebaseSettings fbSettings;
+
         private readonly ILogger<FbNotificationService> logger;
 
         public FbNotificationService(
             IFbTokenService fbTokenService,
+            IOptions<FirebaseSettings> fbSettings,
             ILogger<FbNotificationService> logger)
         {
-            FirebaseApp.Create(new AppOptions()
-            {
-                Credential = GoogleCredential.GetApplicationDefault(),
-                ProjectId = "cybercafe-af556",
-            });
-
+            this.fbSettings = fbSettings.Value;
             this.fbTokenService = fbTokenService;
             this.logger = logger;
+
+            try
+            {
+                FirebaseApp.Create(new AppOptions()
+                {
+                    Credential = GoogleCredential.GetApplicationDefault(),
+                    ProjectId = this.fbSettings.ProjectId,
+                });
+            }
+            catch
+            {
+                this.logger.LogError("Firebase initialization failed!");
+            }
         }
 
-        public async Task SendMessage(string clientId, string payload, string eventType)
+        public async Task SendMessage(string eventType, string clientId, string payload)
         {
-            var token = await this.fbTokenService.GetFbToken(clientId);
-
-            var message = new Message()
+            try
             {
-                Data = new Dictionary<string, string>()
+                var token = await this.fbTokenService.GetFbToken(clientId);
+
+                var message = new Message()
                 {
-                    { "payload", payload },
-                    { "event", eventType },
-                },
-                Token = token,
-            };
+                    Data = new Dictionary<string, string>()
+                    {
+                        { "payload", payload },
+                        { "event", eventType },
+                    },
+                    Token = token,
+                };
 
-            var response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
+                var response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
 
-            this.logger.LogInformation("Sent message to Firebase: " + response, payload);
+                this.logger.LogInformation("Sent message to Firebase: " + response, payload);
+            }
+            catch
+            {
+                this.logger.LogError($"Firebase message sending failed! eventType={eventType}, clientId={clientId}, payload={payload}");
+            }
         }
     }
 }

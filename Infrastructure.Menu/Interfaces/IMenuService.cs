@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Fedor Bashilov. All rights reserved.
 
-namespace Infrastructure.Menu.Services
+namespace Infrastructure.Menu.Interfaces
 {
     using Infrastructure.Menu.Models;
 

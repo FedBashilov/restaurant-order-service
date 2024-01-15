@@ -2,16 +2,16 @@
 
 namespace Infrastructure.Core.Models.Responses
 {
-    public class OrderMenuItemResponse
+    public record OrderMenuItemResponse
     {
-        public int Id { get; set; }
+        public int Id { get; init; }
 
-        public string? Name { get; set; }
+        public string? Name { get; init; }
 
-        public string? ImageUrl { get; set; }
+        public string? ImageUrl { get; init; }
 
-        public int Price { get; set; }
+        public int Price { get; init; }
 
-        public int Amount { get; set; }
+        public int Amount { get; init; }
     }
 }

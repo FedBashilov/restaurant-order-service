@@ -5,6 +5,7 @@ namespace Infrastructure.Menu
     using System.Net.Http.Headers;
     using System.Text.Json;
     using Infrastructure.Menu.Exceptions;
+    using Infrastructure.Menu.Interfaces;
 
     internal class HttpRequestFactory : IHttpRequestFactory
     {

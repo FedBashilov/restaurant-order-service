@@ -8,6 +8,6 @@ namespace Firebase.Service.Models.DTOs
     {
         [Required(ErrorMessage = "The FirebaseToken param is required")]
         [MinLength(1, ErrorMessage = "The FirebaseToken param must have at least 1 item")]
-        public string? FirebaseToken { get; set; }
+        public string? FirebaseToken { get; init; }
     }
 }

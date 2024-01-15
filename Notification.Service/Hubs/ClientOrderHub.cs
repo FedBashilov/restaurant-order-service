@@ -5,7 +5,7 @@ namespace Notifications.Service.Hubs
     using Infrastructure.Auth.Constants;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.Extensions.Logging;
-    using Notifications.Service;
+    using Notifications.Service.Interfaces;
 
     [Authorize(Roles = UserRoles.Client)]
     public class ClientOrderHub : OrderHub

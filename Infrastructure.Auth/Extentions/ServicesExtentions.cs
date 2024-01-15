@@ -3,6 +3,7 @@
 namespace Infrastructure.Auth.Extentions
 {
     using System.Text;
+    using Infrastructure.Auth.Settings;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -12,10 +13,10 @@ namespace Infrastructure.Auth.Extentions
     {
         public static void AddAuthServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<AccessTokenOptions>(configuration.GetSection("AccessTokenOptions"));
-            var secretKey = configuration.GetSection("AccessTokenOptions:SecretKey").Value ?? throw new NullReferenceException("SecretKey can not be null");
-            var issuer = configuration.GetSection("AccessTokenOptions:Issuer").Value ?? throw new NullReferenceException("Issuer can not be null");
-            var audience = configuration.GetSection("AccessTokenOptions:Audience").Value ?? throw new NullReferenceException("Audience can not be null");
+            services.Configure<AccessTokenSettings>(configuration.GetSection("AccessTokenSettings"));
+            var secretKey = configuration.GetSection("AccessTokenSettings:SecretKey").Value ?? throw new NullReferenceException("SecretKey can not be null");
+            var issuer = configuration.GetSection("AccessTokenSettings:Issuer").Value ?? throw new NullReferenceException("Issuer can not be null");
+            var audience = configuration.GetSection("AccessTokenSettings:Audience").Value ?? throw new NullReferenceException("Audience can not be null");
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
             services.AddAuthentication(options =>

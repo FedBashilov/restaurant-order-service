@@ -5,7 +5,7 @@ namespace Web.Facade.Controllers
     using System.ComponentModel.DataAnnotations;
     using System.Diagnostics.CodeAnalysis;
     using System.Text.Json;
-    using Firebase.Service;
+    using Firebase.Service.Interfaces;
     using Infrastructure.Auth.Constants;
     using Infrastructure.Auth.Services;
     using Infrastructure.Core.Extentions;
@@ -15,10 +15,10 @@ namespace Web.Facade.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
-    using Notifications.Service;
     using Notifications.Service.Hubs;
-    using Orders.Service;
+    using Notifications.Service.Interfaces;
     using Orders.Service.Exceptions;
+    using Orders.Service.Interfaces;
 
     [Route("api/v1/orders")]
     public class OrderController : ControllerBase
@@ -134,7 +134,7 @@ namespace Web.Facade.Controllers
             try
             {
                 var accessToken = await this.HttpContext.GetTokenAsync("access_token");
-                var clientId = JwtService.GetClaimValue(accessToken, "http://schemas.xmlsoap.org/ws/2009/09/identity/claims/actor");
+                var clientId = JwtService.GetClaimValue(accessToken, ClaimTypes.Actor);
 
                 var order = await this.orderService.CreateOrder(newOrder, clientId, accessToken);
 
@@ -142,12 +142,12 @@ namespace Web.Facade.Controllers
                 {
                     this.NotifyClientAndCooks(clientId, order),
                     this.firebaseService.SendMessage(
+                        "orderCreate",
                         order.ClientId!,
                         JsonSerializer.Serialize(order, new JsonSerializerOptions
                         {
                             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                        }),
-                        "orderCreate"),
+                        })),
                 };
 
                 await Task.WhenAll(notifyTasks);
@@ -191,12 +191,12 @@ namespace Web.Facade.Controllers
                 {
                     this.NotifyClientAndCooks(order.ClientId!, order),
                     this.firebaseService.SendMessage(
+                        "orderStatusUpdate",
                         order.ClientId!,
                         JsonSerializer.Serialize(order, new JsonSerializerOptions
                         {
                             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                        }),
-                        "orderStatusUpdate"),
+                        })),
                 };
 
                 await Task.WhenAll(notifyTasks);

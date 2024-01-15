@@ -2,19 +2,33 @@
 
 namespace Firebase.Service
 {
+    using Firebase.Service.Interfaces;
+    using Firebase.Service.Settings;
     using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
     using StackExchange.Redis;
 
     public class FbTokenService : IFbTokenService
     {
         private readonly IDatabase redisDb;
+        private readonly RedisSettings redisSettings;
         private readonly ILogger<FbTokenService> logger;
 
         public FbTokenService(
+            IOptions<RedisSettings> redisSettings,
             ILogger<FbTokenService> logger)
         {
+            this.redisSettings = redisSettings.Value;
             this.logger = logger;
-            this.redisDb = ConnectionMultiplexer.Connect("localhost").GetDatabase();
+
+            try
+            {
+                this.redisDb = ConnectionMultiplexer.Connect(this.redisSettings.HostName!).GetDatabase();
+            }
+            catch
+            {
+                this.logger.LogError("Redis connection failed!");
+            }
         }
 
         public async Task<string> GetFbToken(string clientId)

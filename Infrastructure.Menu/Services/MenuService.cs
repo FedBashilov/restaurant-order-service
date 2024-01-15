@@ -4,17 +4,19 @@ namespace Infrastructure.Menu.Services
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Infrastructure.Menu.Interfaces;
     using Infrastructure.Menu.Models;
+    using Infrastructure.Menu.Settings;
     using Microsoft.Extensions.Options;
 
     public class MenuService : IMenuService
     {
         private readonly IHttpRequestFactory httpRequestFactory;
-        private readonly IOptions<MenuConfig> configuration;
+        private readonly IOptions<MenuServiceSettings> configuration;
 
         public MenuService(
             IHttpRequestFactory httpRequestFactory,
-            IOptions<MenuConfig> configuration)
+            IOptions<MenuServiceSettings> configuration)
         {
             this.httpRequestFactory = httpRequestFactory;
             this.configuration = configuration;

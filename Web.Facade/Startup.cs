@@ -26,7 +26,7 @@ namespace Web.Facade
             services.AddDatabaseServices(this.Configuration);
             services.AddAuthServices(this.Configuration);
             services.AddMenuServices(this.Configuration);
-            services.AddFirebaseServices();
+            services.AddFirebaseServices(this.Configuration);
             services.AddNotificationServices();
             services.AddOrderServices();
 

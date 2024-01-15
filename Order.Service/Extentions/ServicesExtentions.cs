@@ -5,6 +5,7 @@ namespace Orders.Service.Extentions
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
     using Orders.Service;
+    using Orders.Service.Interfaces;
 
     public static class ServicesExtentions
     {

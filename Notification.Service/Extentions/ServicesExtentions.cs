@@ -5,6 +5,7 @@ namespace Notifications.Service.Extentions
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
     using Notifications.Service;
+    using Notifications.Service.Interfaces;
 
     public static class ServicesExtentions
     {

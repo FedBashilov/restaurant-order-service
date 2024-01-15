@@ -5,6 +5,7 @@ namespace Notifications.Service.Hubs
     using Infrastructure.Auth.Constants;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.Extensions.Logging;
+    using Notifications.Service.Interfaces;
 
     [Authorize(Roles = UserRoles.Cook)]
     public class CookOrderHub : OrderHub

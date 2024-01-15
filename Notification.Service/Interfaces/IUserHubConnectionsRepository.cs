@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Fedor Bashilov. All rights reserved.
 
-namespace Notifications.Service
+namespace Notifications.Service.Interfaces
 {
     public interface IUserHubConnectionsRepository
     {

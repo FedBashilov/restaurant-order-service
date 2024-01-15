@@ -7,6 +7,6 @@ namespace Infrastructure.Core.Models.DTOs
     public record UpdateOrderStatusDTO
     {
         [Required(ErrorMessage = "The Status param is required")]
-        public string? Status { get; set; }
+        public string? Status { get; init; }
     }
 }

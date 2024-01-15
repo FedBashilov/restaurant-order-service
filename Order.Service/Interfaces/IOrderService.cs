@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Fedor Bashilov. All rights reserved.
 
-namespace Orders.Service
+namespace Orders.Service.Interfaces
 {
     using Infrastructure.Core.Models;
     using Infrastructure.Core.Models.DTOs;

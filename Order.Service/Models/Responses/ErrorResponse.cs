@@ -2,13 +2,13 @@
 
 namespace Infrastructure.Core.Models.Responses
 {
-    public class ErrorResponse
+    public record ErrorResponse
     {
         public ErrorResponse(string message)
         {
             this.Message = message;
         }
 
-        public string? Message { get; set; }
+        public string? Message { get; init; }
     }
 }
