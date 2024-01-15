@@ -55,8 +55,6 @@ Global
 		{03336B8D-13CA-44EA-ABF5-E7E06A9683A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03336B8D-13CA-44EA-ABF5-E7E06A9683A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03336B8D-13CA-44EA-ABF5-E7E06A9683A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F3062310-9D1A-4838-8829-71052FDF3327}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F3062310-9D1A-4838-8829-71052FDF3327}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{241ADA12-FE7C-45A2-AB2E-88569F1FAEC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{241ADA12-FE7C-45A2-AB2E-88569F1FAEC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{241ADA12-FE7C-45A2-AB2E-88569F1FAEC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -66,7 +64,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {E962F47E-E851-4A01-B486-A0987E465F09}
+		SolutionGuid = {53909F44-2FB5-4A3B-90F8-5A935CB52003}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Shared\Shared.projitems*{03336b8d-13ca-44ea-abf5-e7e06a9683a3}*SharedItemsImports = 5
