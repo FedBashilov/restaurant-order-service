@@ -4,7 +4,7 @@ namespace Infrastructure.Core.Models.DTOs
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class CreateOrderMenuItemDTO
+    public record CreateOrderMenuItemDTO
     {
         [Range(0, int.MaxValue, ErrorMessage = "The MenuItemId param must be positive")]
         public int MenuItemId { get; set; }
