@@ -9,22 +9,15 @@ services:
             - "5029:80"
         build: '../'
         environment:
-            ConnectionStrings__DatabaseConnection: 'Data Source=order_db; Initial Catalog=OrderService; User ID=SA; Password=Adminadmin1@'
-            MenuService__Url: 'http://menu_webfacade'
-        depends_on:
-            - db
+            ConnectionStrings__DatabaseConnection: 'Data Source=mssql_server; Initial Catalog=OrderService; User ID=SA; Password=Adminadmin1@'
+            MenuServiceSettings__Url: 'http://menu_webfacade'
+            RedisSettings__Hostname: 'redis'
+            GOOGLE_APPLICATION_CREDENTIALS: '/tmp/keys/application_default_credentials.json'
+            FirebaseSettings__ProjectId: ''
         networks:
             - app_bridge_network
-    db:
-        container_name: order_db
-        image: "mcr.microsoft.com/mssql/server:2019-latest"
-        ports:
-            - "1435:1433"
-        environment:
-            - ACCEPT_EULA=y
-            - MSSQL_SA_PASSWORD=Adminadmin1@
-        networks:
-            - app_bridge_network
+        volumes:
+            - './../application_default_credentials.json:/tmp/keys/application_default_credentials.json:ro'
 
 networks:
     app_bridge_network:

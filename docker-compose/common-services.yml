@@ -1,0 +1,40 @@
+version: '3.5'
+name: common_services
+
+services:
+    mssql_server:
+        image: "mcr.microsoft.com/mssql/server:2019-latest"
+        container_name: mssql_server
+        ports:
+            - "1433:1433"
+        environment:
+            - ACCEPT_EULA=y
+            - MSSQL_SA_PASSWORD=Adminadmin1@
+        networks:
+            - app_bridge_network
+    rabbitMQ:
+        image: "rabbitmq:3.12-management"
+        hostname: "rabbitMQ"
+        container_name: rabbitMQ
+        healthcheck:
+            test: rabbitmq-diagnostics -q ping
+            interval: 5s
+            timeout: 15s
+            retries: 3
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+        networks:
+            - app_bridge_network
+    redis:
+        image: "redis:latest"
+        container_name: redis
+        ports:
+            - "6379:6379"
+        networks:
+            - app_bridge_network
+networks:
+    app_bridge_network:
+        name: app_bridge_network
+        driver: bridge
+        external: true

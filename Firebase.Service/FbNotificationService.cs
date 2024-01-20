@@ -34,9 +34,9 @@ namespace Firebase.Service
                     ProjectId = this.fbSettings.ProjectId,
                 });
             }
-            catch
+            catch (Exception e)
             {
-                this.logger.LogError("Firebase initialization failed!");
+                this.logger.LogError("Firebase initialization failed!" + e.Message);
             }
         }
 
