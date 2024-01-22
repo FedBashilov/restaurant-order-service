@@ -22,9 +22,13 @@ namespace Infrastructure.Menu.Services
             this.configuration = configuration;
         }
 
-        public async Task<List<MenuItem>> GetAllMenu(string? accessToken, bool onlyVisible = true)
+        public async Task<List<MenuItem>> GetAllMenu(
+            string? accessToken,
+            IEnumerable<int>? ids = default,
+            bool onlyVisible = true)
         {
-            return await this.httpRequestFactory.GetHttpRequest<List<MenuItem>>(new Uri($"{this.configuration.Value.Url}/api/v1/menu?onlyVisible={onlyVisible}"), accessToken);
+            var idsParam = ids.Count() > 0 ? "&ids=" + string.Join(",", ids) : string.Empty;
+            return await this.httpRequestFactory.GetHttpRequest<List<MenuItem>>(new Uri($"{this.configuration.Value.Url}/api/v1/menu?onlyVisible={onlyVisible}{idsParam}"), accessToken);
         }
 
         public async Task<MenuItem> GetMenuItem(int id, string? accessToken)

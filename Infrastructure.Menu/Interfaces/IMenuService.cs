@@ -6,7 +6,7 @@ namespace Infrastructure.Menu.Interfaces
 
     public interface IMenuService
     {
-        public Task<List<MenuItem>> GetAllMenu(string? accessToken, bool onlyVisible = true);
+        public Task<List<MenuItem>> GetAllMenu(string? accessToken, IEnumerable<int>? ids = default, bool onlyVisible = true);
 
         public Task<MenuItem> GetMenuItem(int id, string? accessToken);
 

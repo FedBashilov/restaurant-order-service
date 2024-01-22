@@ -158,17 +158,12 @@ namespace Orders.Service
                 MenuItems = new List<OrderMenuItemResponse>(),
             };
 
-            var menuItemTasks = new List<Task<MenuItem>>();
-
             var orderMenuItems = dbContext.OrderMenuItems.Where(omi => omi.OrderId == order.Id).ToList();
-            foreach (var orderMenuItem in orderMenuItems)
-            {
-                menuItemTasks.Add(this.menuService.GetMenuItem(orderMenuItem.MenuItemId, accessToken));
-            }
 
-            var menuItems = await Task.WhenAll(menuItemTasks);
+            var menuItemIds = orderMenuItems.Select(mi => mi.MenuItemId);
+            var menuItems = await this.menuService.GetAllMenu(accessToken, menuItemIds);
 
-            for (var i = 0; i < menuItems.Length; i++)
+            for (var i = 0; i < menuItems.Count(); i++)
             {
                 orderResponse.MenuItems.Add(new OrderMenuItemResponse()
                 {
